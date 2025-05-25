@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Ninfas</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="fade-in">
+    <div class="ninfas-background">
+      <img src="imagens/ninfasfundo.jpg" alt="Fundo Ninfas" />
+    </div>
+    <nav class="menu">
+      <ul>
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>
+
+    <main class="conteudo-ninfas">
+      <!--<div class="audio-container">
+        <audio id="audio-ninfas" controls preload="auto">
+          <source src="audios/ninfas.mp3" type="audio/mp3" />
+          Seu navegador não suporta áudio. 
+        </audio>
+      </div>-->
+      <div class="audio-container">
+        <button id="playButton">▶️</button>
+        <audio id="audio" src="audios/ninfas.mp3"></audio>
+      </div>
+    </main>
+    <script>
+      document.body.style.opacity = 0;
+      window.onload = function () {
+        let opacity = 0;
+        let interval = setInterval(() => {
+          opacity += 0.01;
+          document.body.style.opacity = opacity;
+          if (opacity >= 1) clearInterval(interval);
+        }, 60);
+      };
+    </script>
+    <script>
+      document.getElementById('playButton').addEventListener('click', function () {
+        const audio = document.getElementById('audio');
+        audio.play();
+        this.style.display = 'none'; // esconde o botão
+      });
+    </script>
+
+    <!--
+    <script>
+      document.body.style.opacity = 0;
+      window.onload = function () {
+        let opacity = 0;
+        let interval = setInterval(() => {
+          opacity += 0.01;
+          document.body.style.opacity = opacity;
+          if (opacity >= 1) clearInterval(interval);
+        }, 60);
+      };
+    </script>
+    <script>
+      window.addEventListener('scroll', () => {
+        const bg = document.querySelector('.ninfas-background');
+        let scrollY = window.scrollY;
+        bg.style.backgroundPosition = `center calc(50% + ${scrollY / 5}px)`;
+      });
+    </script>
+    -->
+  </body>
+</html>

@@ -1,0 +1,415 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Courier New", Courier, monospace;
+  background-color: #111;
+  color: #e0e0e0;
+  overflow-x: hidden;
+}
+/*
+body {
+  opacity: 0;
+  transform: translateY(2vh);
+  transition: opacity 2s ease, transform 2s ease;
+}
+
+body.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+*/
+body.fade-in {
+  opacity: 0;
+  animation: fadein 6s forwards;
+}
+
+@keyframes fadein {
+  to {
+    opacity: 1;
+  }
+}
+
+.video-background video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-background .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+
+.menu {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  /* padding: 10vw; */
+  z-index: 3;
+  text-align: center;
+  padding-top: 5vh;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 2vh 0 2vh 0;
+  display: inline-flex;
+  column-gap: 5vh;
+}
+
+.menu li {
+  margin-left: 2vh;
+  margin-right: 2vh;
+  white-space: nowrap;
+}
+
+.menu a {
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(12px, 2vh, 24px);
+  font-weight: bold;
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: color 0.6s;
+}
+
+.menu a:hover {
+  color: #BADA54;
+}
+
+.menu a.active {
+  color: #8C0000;
+}
+
+nav.menu + div {
+  padding-top: 60px;
+}
+
+.galeria {
+  margin-top: 8vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 11vh 5vw 5vh;
+  position: relative;
+  z-index: 2;
+}
+
+.episodio {
+  display: block;
+  width: 37.3vh;
+  margin: 0 3vh 6vh;
+  text-decoration: none;
+  color: inherit;
+}
+
+.episodio img {
+  width: calc(28vh *4/3);
+  height: 28vh;
+  object-fit: cover;
+  display: block;
+}
+
+.episodio h2 {
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(16px, 2.4vh, 26px);
+  text-align: left;
+  margin: 0.2vh 0 -0.2vh;
+  font-weight: normal;
+}
+
+.episodio p {
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(14px, 1.8vh, 24px);
+  text-align: left;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .episodio {
+    width: 90vw;
+    margin: 0 auto 6vh;
+  }
+
+  .episodio img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.latencia-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.latencia-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.1) contrast(1) brightness(2) blur(6px);
+}
+
+.texto-latencia {
+  position: absolute;
+  z-index: 2;
+  padding: 11vh 6vw 5vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.latencia-esquerda {
+  margin-top: 16vh;
+  text-align: justify-all;
+  max-width: 90ch;
+  color: #fefefe;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(12px, 1.66vh, 20px);
+  line-height: 2.4vh;
+  margin-bottom: 7vh;
+}
+
+.latencia-direita {
+  text-align: right;
+  max-width: 90ch;
+  color: #fefefe;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(12px, 1.66vh, 20px);
+  line-height: 2.4vh;
+}
+
+.duo-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -2;
+}
+
+.duo-texto {
+  max-width: 80%;
+  margin: 8vh auto 0;
+  text-align: center;
+  line-height: 3vh;
+  color: #fefefe;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(14px, 1.89vh, 24px);
+}
+
+.duo-texto span {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.1em 0.3em;
+}
+
+.duo-foto {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -1vh;
+}
+
+.duo-foto img {
+  width: clamp(200px, 30vw, 400px);
+  height: auto;
+  object-fit: contain;
+}
+
+.duo-img-cred {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-top: 1rem;
+}
+
+.duo-img {
+  max-width: 90vw;
+  height: auto;
+}
+
+.duo-contato {
+  text-align: center;
+  margin-top: 1rem;
+  color: #E0E0E0;
+}
+
+.duo-contato span {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.1em 0.3em;
+}
+
+.duo-redes {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.duo-redes img {
+  object-fit: contain;
+  
+}
+
+.thumb-wrap {
+  background-color: rgba(0, 0, 0, 0.6); 
+  padding: 3px;
+  margin-left: 6px;
+  margin-right: 6px;
+  border-radius: 16px;
+  transition: background-color 0.3s;
+}
+
+.thumb-wrap:hover {
+  background-color: rgba(186, 218, 84, 0.7); /* verde no hover */
+}
+
+.thumb-wrap img {
+  width: auto;
+  display: block;
+}
+
+.credito-foto {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  margin-right: -80vw;
+  font-size: 13px;
+  color: #E0E0E0;
+
+}
+
+.vertical {
+  writing-mode: vertical-rl;
+  transform: rotate(0deg);
+}
+/*
+.ninfas-background {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('../imagens/ninfasfundos.jpg') no-repeat center center fixed;
+  background-size: cover;
+  z-index: -2;
+  /* parallax suave */ /*
+  background-attachment: fixed; /* já fixo */
+  /* o background-position vai ser alterado via JS para efeito sutil */ /*
+} 
+
+.imagem-fundo-ninfas {
+  background-image: url('imagens/ninfasfundos.jpg');
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+} */
+
+.ninfas-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../imagens/ninfasfundo.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+}
+/*
+.audio-container {
+  margin-top: 21vh;
+  text-align: center;
+  z-index: 10;
+  position: relative;
+}
+audio {
+  width: 49vh;
+}
+
+.fade-in {
+  animation: fadeInBody 6s ease-in forwards;
+}
+@keyframes fadeInBody {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}*/
+
+.audio-container {
+  position: relative;
+  margin-top: 21vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#audio {
+  display: none; /* esconde completamente */
+}
+
+#audio::-webkit-media-controls {
+  display: none !important;
+}
+
+#playButton {
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(96px, 12vh, 128px);
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: color 0.5s;
+}
+
+#playButton:hover {
+  color: #BADA54;
+}
+
+.insuflaras-background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -2;
+}
+
+.insuflaras-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1) brightness(1.33) blur(3px);
+}
+  
+.video-container {
+  position: relative;
+  margin-top: 21vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  flex-direction: column;
+}
+  
+  

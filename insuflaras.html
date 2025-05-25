@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Insuflarás</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="fade-in">
+    <div class="insuflaras-background">
+      <video autoplay muted loop playsinline>
+        <source src="videos/boneco.mp4" type="video/mp4">
+      </video>
+    </div>
+    <nav class="menu">
+      <ul>
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>
+    <div class="video-container">
+      <button id="playButton">▶︎</button>
+      <video id="insuflarasVideo" width="384" height="288" style="display: none;">
+        <source src="videos/insuflaras.mp4" type="video/mp4">
+        Seu navegador não suporta vídeos HTML5.
+      </video>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const playBtn = document.getElementById("playButton");
+        const video = document.getElementById("insuflarasVideo");
+
+        playBtn.addEventListener("click", () => {
+          playBtn.style.display = "none";
+          video.style.display = "block";
+          video.play();
+        });
+      });
+    </script>
+  </body>
+</html>
