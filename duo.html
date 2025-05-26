@@ -5,10 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Latência | César & Juliano</title>
     <link rel="stylesheet" href="css/style.css" />
+    <!-- Meta preview -->
+    <meta property="og:title" content="César & Juliano" />
+    <meta property="og:description" content="sax tentando parecer guitarra & guitarra tentando parecer sax" />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/imagens/iago.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/duo.html" />
+    <meta property="og:type" content="website" />
+    <!-- opcional para Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+
   </head>
   <body style="background-image: url('imagens/iago.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-    <nav class="menu">
+    <!--
+    <div class="duo-background">
+      <img src="imagens/iago.jpg" alt="César & Juliano por Iago Mati"/>
+    </div>-->
+
+    <!--<nav class="menu">
       <ul>
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html" class="active">César & Juliano</a></li>
+      </ul>
+    </nav>-->
+    <nav class="menu">
+      <button id="menu-toggle">☰</button>
+      <ul id="menu-items">
         <li><a href="index.html">Episódios</a></li>
         <li><a href="latencia.html">Latência</a></li>
         <li><a href="duo.html" class="active">César & Juliano</a></li>
@@ -52,6 +74,14 @@
   
 
     </footer>
-    
+    <script>
+      const toggle = document.getElementById("menu-toggle");
+      const items = document.getElementById("menu-items");
+
+      toggle.addEventListener("click", () => {
+        items.classList.toggle("active");
+      });
+    </script>
+
   </body>
 </html>

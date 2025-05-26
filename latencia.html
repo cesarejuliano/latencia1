@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Latência | Latência</title>
     <link rel="stylesheet" href="css/style.css" />
+    <!-- Meta preview -->
+    <meta property="og:title" content="Latência — Episódio" />
+    <meta property="og:description" content="série de César & Juliano apresentada em episódios esporádicos" />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/thumbs/index-previa.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/latencia.html" />
+    <meta property="og:type" content="website" />
+    <!-- opcional para Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+
   </head>
   <body>
     <div class="latencia-background">
@@ -12,13 +21,22 @@
         <source src="videos/luminaria.mp4" type="video/mp4" />
       </video>
     </div>
-    <nav class="menu">
+    <!--<nav class="menu">
       <ul>
         <li><a href="index.html">Episódios</a></li>
         <li><a href="latencia.html" class="active">Latência</a></li>
         <li><a href="duo.html">César & Juliano</a></li>
       </ul>
+    </nav>-->
+    <nav class="menu">
+      <button id="menu-toggle">☰</button>
+      <ul id="menu-items">
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html" class="active">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
     </nav>
+
     <div class="texto-latencia">
       <p class="latencia-esquerda">
         Latência é o substantivo feminino que escolhemos:<br>
@@ -36,9 +54,14 @@
         LATÊNCIA é uma série de César & Juliano apresentada em episódios esporádicos.
       </p>
     </div>
-    
+    <script>
+      const toggle = document.getElementById("menu-toggle");
+      const items = document.getElementById("menu-items");
 
-
+      toggle.addEventListener("click", () => {
+        items.classList.toggle("active");
+      });
+    </script>
 
   </body>
 </html>
