@@ -174,3 +174,11 @@ window.onload = function () {
   }
 };
 */
+
+/*menu hamburguer */
+const toggle = document.getElementById("menu-toggle");
+const items = document.getElementById("menu-items");
+
+toggle.addEventListener("click", () => {
+  items.classList.toggle("active");
+});
