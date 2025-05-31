@@ -322,6 +322,20 @@ nav.menu + div {
   color: #BADA54;
 }
 
+#swapButton {
+  position: absolute;
+  margin: 10vh auto 2vh auto;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 6vh;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+}
+
 .insuflaras-background {
   position: fixed;
   top: 0; left: 0;
