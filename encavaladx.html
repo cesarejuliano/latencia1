@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Dois violões</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta property="og:title" content="Dois Violões — Latência" />
+    <meta property="og:description" content="Episódio da série Latência por César & Juliano." />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/thumbs/index-previa.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/encavalada.html" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="fade-in">
+    <div class="encavalada-background">
+      <img src="imagens/mondrian.jpg" alt="Fundo Encavalada" />
+    </div>
+
+    <nav class="menu">
+      <button id="menu-toggle">☰</button>
+      <ul id="menu-items">
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>
+
+    <main class="conteudo-ninfas">
+      <div class="audio-container">
+        <button id="playButton">▶️</button>
+        <button id="swapButton" style="display:none">🎭</button>
+      </div>
+    </main>
+
+    <script>
+      document.body.style.opacity = 0;
+      window.onload = function () {
+        let opacity = 0;
+        let interval = setInterval(() => {
+          opacity += 0.01;
+          document.body.style.opacity = opacity;
+          if (opacity >= 1) clearInterval(interval);
+        }, 60);
+      };
+    </script>
+
+    <script>
+      const toggle = document.getElementById("menu-toggle");
+      const items = document.getElementById("menu-items");
+      toggle.addEventListener("click", () => items.classList.toggle("active"));
+    </script>
+
+    <script>
+      const cAudios = ['c1', 'c2', 'c3', 'c4', 'c5'];
+      const jAudios = ['j1', 'j2', 'j3', 'j4', 'j5'];
+      const durations = {
+        c1: 62, c2: 63, c3: 63, c4: 64, c5: 217,
+        j1: 49, j2: 65, j3: 64, j4: 64, j5: 170
+      };
+      const baseDelays = {
+        c1: 14, c2: 16, c3: 16, c4: 17, c5: 15,
+        j1: 16, j2: 15, j3: 15, j4: 15, j5: 14
+      };
+
+      let currentC = null, currentJ = null;
+      let audioElements = {};
+
+      function createAudio(id) {
+        const el = new Audio(`audios/${id}.mp3`);
+        el.preload = 'auto';
+        audioElements[id] = el;
+        return el;
+      }
+
+      function playAudio(id, type) {
+        if (type === 'C') {
+          if (currentC) audioElements[currentC].pause();
+          currentC = id;
+        } else {
+          if (currentJ) audioElements[currentJ].pause();
+          currentJ = id;
+        }
+        const audio = audioElements[id] || createAudio(id);
+        audio.currentTime = Math.random() * durations[id];
+        audio.play();
+        return audio;
+      }
+
+      function getDelay(id) {
+        const base = baseDelays[id];
+        return base + (Math.random() * 4 - 2);
+      }
+
+      function encadear(proximoID, tipo) {
+        const delay = getDelay(proximoID) * 1000;
+        setTimeout(() => {
+          const audio = playAudio(proximoID, tipo);
+          audio.onended = () => {
+            const nextIndex = (tipo === 'C' ? cAudios : jAudios).indexOf(proximoID) + 1;
+            const nextList = tipo === 'C' ? cAudios : jAudios;
+            if (nextIndex < nextList.length) {
+              const nextID = nextList[nextIndex];
+              encadear(nextID, tipo);
+            }
+          };
+        }, delay);
+      }
+
+      function iniciarPar(id, tipo) {
+        const outro = tipo === 'C' ? 'J' : 'C';
+        playAudio(id, tipo);
+        const index = (tipo === 'C' ? cAudios : jAudios).indexOf(id);
+        const correspondente = tipo === 'C' ? jAudios[index] : cAudios[index];
+        encadear(correspondente, outro);
+      }
+
+      function dispararInicio() {
+        const initC = cAudios.slice(1);
+        const initJ = jAudios.slice(0, 4);
+        const lista = Math.random() < 0.5 ? initC : initJ;
+        const sorteado = lista[Math.floor(Math.random() * lista.length)];
+        const tipo = cAudios.includes(sorteado) ? 'C' : 'J';
+        iniciarPar(sorteado, tipo);
+        setTimeout(() => mostrarSwap(), randTempoSwap());
+      }
+
+      function mostrarSwap() {
+        const btn = document.getElementById('swapButton');
+        btn.style.display = 'inline-block';
+      }
+
+      function randTempoSwap() {
+        return (20 + Math.random() * 20) * 1000;
+      }
+
+      function trocaPapeis() {
+        const lista = Math.random() < 0.5 ? cAudios.slice(1) : jAudios.slice(0, 4);
+        const novo = lista[Math.floor(Math.random() * lista.length)];
+        const tipo = cAudios.includes(novo) ? 'C' : 'J';
+        iniciarPar(novo, tipo);
+        document.getElementById('swapButton').style.display = 'none';
+        setTimeout(() => mostrarSwap(), randTempoSwap());
+      }
+
+      document.getElementById('playButton').addEventListener('click', () => {
+        dispararInicio();
+        document.getElementById('playButton').style.display = 'none';
+      });
+
+      document.getElementById('swapButton').addEventListener('click', trocaPapeis);
+    </script>
+    
+    <script>
+      document.body.style.opacity = 0;
+      window.onload = function () {
+        let opacity = 0;
+        let interval = setInterval(() => {
+          opacity += 0.01;
+          document.body.style.opacity = opacity;
+          if (opacity >= 1) clearInterval(interval);
+        }, 60);
+      };
+    </script>
+
+  </body>
+</html>
