@@ -323,9 +323,8 @@ nav.menu + div {
 }
 
 #swapButton {
-  position: absolute;
-  margin: 10vh auto 2vh auto;
-  bottom: 6px;
+  position: fixed; /* ou absolute, dependendo da hierarquia */
+  bottom: 6vh;
   left: 50%;
   transform: translateX(-50%);
   font-size: 6vh;
@@ -334,6 +333,7 @@ nav.menu + div {
   color: white;
   cursor: pointer;
   z-index: 10;
+  display: none; /* inicialmente oculto */
 }
 
 .insuflaras-background {
@@ -361,6 +361,16 @@ nav.menu + div {
 }
 
 .encavalada-background img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.golfinho-background img {
   position: fixed;
   top: 0;
   left: 0;
