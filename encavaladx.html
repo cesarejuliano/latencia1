@@ -163,12 +163,10 @@
         playButton.style.display = 'none';
         showSwapButtonAfterDelay();
       });
-    </script>
-    <script>
+      
       const toggle = document.getElementById("menu-toggle");
       const items = document.getElementById("menu-items");
-
-      toggle.addEventListener("click", () => {
+      toggle?.addEventListener("click", () => {
         items.classList.toggle("active");
       });
     </script>
