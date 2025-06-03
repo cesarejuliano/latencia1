@@ -32,7 +32,7 @@
         <button id="swapButton" style="display:none">🎭</button>
       </div>
     </main>-->
-    <main class="audio-container" style="position: relative;">
+    <main class="audio-container">
       <button id="playButton">▶️</button>
       <!--<div id="info">
         <p id="c-info">C:</p>
@@ -63,13 +63,13 @@
 
       const playButton = document.getElementById('playButton');
       const swapButton = document.getElementById('swapButton');
-      const cInfo = document.getElementById('c-info');
-      const jInfo = document.getElementById('j-info');
+      // const cInfo = document.getElementById('c-info');
+      // const jInfo = document.getElementById('j-info');
 
       // Função para atualizar texto dos áudios atuais
       function updateInfo() {
-        cInfo.textContent = `C: ${cAudios[currentCIndex]}`;
-        jInfo.textContent = `J: ${jAudios[currentJIndex]}`;
+        // cInfo.textContent = `C: ${cAudios[currentCIndex]}`;
+        // jInfo.textContent = `J: ${jAudios[currentJIndex]}`;
       }
 
       // Sorteia índice diferente do atual
