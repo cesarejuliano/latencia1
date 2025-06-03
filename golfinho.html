@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Ninfas</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Meta preview -->
+    <meta property="og:title" content="Ninfas — Latência" />
+    <meta property="og:description" content="Episódio da série Latência por César & Juliano." />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/thumbs/golfinho.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/golfinho.html" />
+    <meta property="og:type" content="website" />
+    <!-- opcional para Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+  </head>
+  <body class="fade-in">
+    <div class="golfinho-background">
+      <img src="imagens/moedas.jpg" alt="Fundo Golfinho" />
+    </div>
+    <!--<nav class="menu">
+      <ul>
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>-->
+    <nav class="menu">
+      <button id="menu-toggle">☰</button>
+      <ul id="menu-items">
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>
+
+    <main class="conteudo-ninfas">
+      <div class="audio-container">
+        <button id="playButton">🐬</button>
+        <audio id="audio" src="audios/trenzinho.mp3" loop></audio>
+      </div>
+
+      <div id="slot-machine" style="display: grid; grid-template-columns: repeat(3, auto); gap: 8px; justify-content: center; margin-top: 1rem;">
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+        <img width="128" height="128" />
+      </div>
+    </main>
+
+    <script>
+      // fade-in da página
+      document.body.style.opacity = 0;
+      window.onload = function () {
+        let opacity = 0;
+        let interval = setInterval(() => {
+          opacity += 0.01;
+          document.body.style.opacity = opacity;
+          if (opacity >= 1) clearInterval(interval);
+        }, 60);
+      };
+
+      const baseURL = 'https://cesarejuliano.github.io/latencia1/thumbs/rostos/';
+      const totalFaces = 799;
+      const minIndex = 001;
+      const maxIndex = 799;
+
+      document.getElementById('playButton').addEventListener('click', function () {
+        const audio = document.getElementById('audio');
+        audio.play();
+
+        // gira os rostos
+        const faces = document.querySelectorAll('#slot-machine img');
+        faces.forEach(img => {
+          const index = Math.floor(Math.random() * (maxIndex - minIndex + 1)) + minIndex;
+          const padded = index.toString().padStart(5, '0');
+          img.src = `${baseURL}${padded}.png`;
+        });
+      });
+
+      const toggle = document.getElementById("menu-toggle");
+      const items = document.getElementById("menu-items");
+      toggle?.addEventListener("click", () => {
+        items.classList.toggle("active");
+      });
+    </script>
+
+
+
+    <!--
+    <script>
+      document.body.style.opacity = 0;
+      window.onload = function () {
+        let opacity = 0;
+        let interval = setInterval(() => {
+          opacity += 0.01;
+          document.body.style.opacity = opacity;
+          if (opacity >= 1) clearInterval(interval);
+        }, 60);
+      };
+    </script>
+    <script>
+      window.addEventListener('scroll', () => {
+        const bg = document.querySelector('.ninfas-background');
+        let scrollY = window.scrollY;
+        bg.style.backgroundPosition = `center calc(50% + ${scrollY / 5}px)`;
+      });
+    </script>
+    -->
+  </body>
+</html>

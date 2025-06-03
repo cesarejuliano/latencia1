@@ -25,143 +25,146 @@
         <li><a href="duo.html">César & Juliano</a></li>
       </ul>
     </nav>
-
+    <!--
     <main class="conteudo-ninfas">
       <div class="audio-container">
         <button id="playButton">▶️</button>
         <button id="swapButton" style="display:none">🎭</button>
       </div>
+    </main>-->
+    <main class="audio-container" style="position: relative;">
+      <button id="playButton">▶️</button>
+      <!--<div id="info">
+        <p id="c-info">C:</p>
+        <p id="j-info">J:</p>
+      </div>-->
+      <button id="swapButton">🎭</button>
     </main>
 
     <script>
-      document.body.style.opacity = 0;
-      window.onload = function () {
-        let opacity = 0;
-        let interval = setInterval(() => {
-          opacity += 0.01;
-          document.body.style.opacity = opacity;
-          if (opacity >= 1) clearInterval(interval);
-        }, 60);
-      };
-    </script>
+      const cAudios = ['c1.mp3', 'c2.mp3', 'c3.mp3', 'c4.mp3', 'c5.mp3'];
+      const jAudios = ['j1.mp3', 'j2.mp3', 'j3.mp3', 'j4.mp3', 'j5.mp3'];
 
-    <script>
-      const toggle = document.getElementById("menu-toggle");
-      const items = document.getElementById("menu-items");
-      toggle.addEventListener("click", () => items.classList.toggle("active"));
-    </script>
-
-    <script>
-      const cAudios = ['c1', 'c2', 'c3', 'c4', 'c5'];
-      const jAudios = ['j1', 'j2', 'j3', 'j4', 'j5'];
+      // Durações dos áudios em segundos, para controle de currentTime
       const durations = {
-        c1: 62, c2: 63, c3: 63, c4: 64, c5: 217,
-        j1: 49, j2: 65, j3: 64, j4: 64, j5: 170
-      };
-      const baseDelays = {
-        c1: 14, c2: 16, c3: 16, c4: 17, c5: 15,
-        j1: 16, j2: 15, j3: 15, j4: 15, j5: 14
+        'c1.mp3': 84, 'j1.mp3': 92,
+        'c2.mp3': 43, 'j2.mp3': 47,
+        'c3.mp3': 76, 'j3.mp3': 68,
+        'c4.mp3': 40, 'j4.mp3': 68,
+        'c5.mp3': 217,'j5.mp3': 184
       };
 
-      let currentC = null, currentJ = null;
-      let audioElements = {};
+      let currentCIndex = null;
+      let currentJIndex = null;
+      let audioC = new Audio();
+      let audioJ = new Audio();
+      audioC.volume = 1;
+      audioJ.volume = 1;
 
-      function createAudio(id) {
-        const el = new Audio(`audios/${id}.mp3`);
-        el.preload = 'auto';
-        audioElements[id] = el;
-        return el;
+      const playButton = document.getElementById('playButton');
+      const swapButton = document.getElementById('swapButton');
+      const cInfo = document.getElementById('c-info');
+      const jInfo = document.getElementById('j-info');
+
+      // Função para atualizar texto dos áudios atuais
+      function updateInfo() {
+        cInfo.textContent = `C: ${cAudios[currentCIndex]}`;
+        jInfo.textContent = `J: ${jAudios[currentJIndex]}`;
       }
 
-      function playAudio(id, type) {
-        if (type === 'C') {
-          if (currentC) audioElements[currentC].pause();
-          currentC = id;
-        } else {
-          if (currentJ) audioElements[currentJ].pause();
-          currentJ = id;
+      // Sorteia índice diferente do atual
+      function getRandomIndex(excludeIndex, max) {
+        let idx;
+        do {
+          idx = Math.floor(Math.random() * max);
+        } while (idx === excludeIndex);
+        return idx;
+      }
+
+      // Define um tempo aleatório entre 0 e 70% da duração do áudio
+      function randomStartTime(duration) {
+        return Math.random() * duration * 0.7;
+      }
+
+      // Posiciona o botão swap em local aleatório longe do play
+      function positionSwapButton() {
+        const container = document.querySelector('.audio-container');
+        const rect = container.getBoundingClientRect();
+        const btnWidth = 50; // aprox width do botão em px
+        const btnHeight = 50; // aprox height do botão
+
+        // Para evitar sobreposição no centro, limita posição
+        const x = Math.random() * (rect.width - btnWidth);
+        const y = Math.random() * (rect.height - btnHeight);
+        swapButton.style.left = `${x}px`;
+        swapButton.style.top = `${y}px`;
+      }
+
+      // Tocar par de áudios c e j, começando do início ou pontos aleatórios até 70%
+      function playPair(cIndex = null) {
+        if (cIndex === null) {
+          cIndex = Math.floor(Math.random() * cAudios.length);
         }
-        const audio = audioElements[id] || createAudio(id);
-        audio.currentTime = Math.random() * durations[id];
-        audio.play();
-        return audio;
+        currentCIndex = cIndex;
+        currentJIndex = cIndex; // índice igual para o par
+
+        audioC.src = `audios/${cAudios[currentCIndex]}`;
+        audioJ.src = `audios/${jAudios[currentJIndex]}`;
+
+        audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
+        audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
+
+        updateInfo();
+
+        audioC.play();
+        audioJ.play();
+
+        // Quando terminar C, toca outro C automaticamente
+        audioC.onended = () => {
+          const nextCIndex = getRandomIndex(currentCIndex, cAudios.length);
+          currentCIndex = nextCIndex;
+          audioC.src = `audios/${cAudios[currentCIndex]}`;
+          audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
+          updateInfo();
+          audioC.play();
+        };
+
+        // Quando terminar J, toca outro J automaticamente (com mesmo índice do C atual)
+        audioJ.onended = () => {
+          currentJIndex = currentCIndex; // mantém índice sincronizado com C
+          audioJ.src = `audios/${jAudios[currentJIndex]}`;
+          audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
+          updateInfo();
+          audioJ.play();
+        };
       }
 
-      function getDelay(id) {
-        const base = baseDelays[id];
-        return base + (Math.random() * 4 - 2);
-      }
-
-      function encadear(proximoID, tipo) {
-        const delay = getDelay(proximoID) * 1000;
+      // Mostrar o botão de swap pela primeira vez só depois de 60-80 segundos
+      function showSwapButtonAfterDelay() {
+        const delayMs = (60 + Math.random() * 20) * 1000; // 60 a 80s
         setTimeout(() => {
-          const audio = playAudio(proximoID, tipo);
-          audio.onended = () => {
-            const nextIndex = (tipo === 'C' ? cAudios : jAudios).indexOf(proximoID) + 1;
-            const nextList = tipo === 'C' ? cAudios : jAudios;
-            if (nextIndex < nextList.length) {
-              const nextID = nextList[nextIndex];
-              encadear(nextID, tipo);
-            }
-          };
-        }, delay);
+          positionSwapButton();
+          swapButton.style.display = 'block';
+        }, delayMs);
       }
 
-      function iniciarPar(id, tipo) {
-        const outro = tipo === 'C' ? 'J' : 'C';
-        playAudio(id, tipo);
-        const index = (tipo === 'C' ? cAudios : jAudios).indexOf(id);
-        const correspondente = tipo === 'C' ? jAudios[index] : cAudios[index];
-        encadear(correspondente, outro);
-      }
-
-      function dispararInicio() {
-        const initC = cAudios.slice(1);
-        const initJ = jAudios.slice(0, 4);
-        const lista = Math.random() < 0.5 ? initC : initJ;
-        const sorteado = lista[Math.floor(Math.random() * lista.length)];
-        const tipo = cAudios.includes(sorteado) ? 'C' : 'J';
-        iniciarPar(sorteado, tipo);
-        setTimeout(() => mostrarSwap(), randTempoSwap());
-      }
-
-      function mostrarSwap() {
-        const btn = document.getElementById('swapButton');
-        btn.style.display = 'inline-block';
-      }
-
-      function randTempoSwap() {
-        return (20 + Math.random() * 20) * 1000;
-      }
-
-      function trocaPapeis() {
-        const lista = Math.random() < 0.5 ? cAudios.slice(1) : jAudios.slice(0, 4);
-        const novo = lista[Math.floor(Math.random() * lista.length)];
-        const tipo = cAudios.includes(novo) ? 'C' : 'J';
-        iniciarPar(novo, tipo);
-        document.getElementById('swapButton').style.display = 'none';
-        setTimeout(() => mostrarSwap(), randTempoSwap());
-      }
-
-      document.getElementById('playButton').addEventListener('click', () => {
-        dispararInicio();
-        document.getElementById('playButton').style.display = 'none';
+      // Trocar pares ao clicar no botão swap
+      swapButton.addEventListener('click', () => {
+        const newCIndex = getRandomIndex(currentCIndex, cAudios.length);
+        playPair(newCIndex);
+        positionSwapButton();
+        swapButton.style.display = 'none'; // esconde até aparecer de novo
+        showSwapButtonAfterDelay();
       });
 
-      document.getElementById('swapButton').addEventListener('click', trocaPapeis);
+      // Ao clicar no play, inicia o som e programa o swapButton
+      playButton.addEventListener('click', () => {
+        playPair();
+        playButton.style.display = 'none';
+        showSwapButtonAfterDelay();
+      });
     </script>
-    
-    <script>
-      document.body.style.opacity = 0;
-      window.onload = function () {
-        let opacity = 0;
-        let interval = setInterval(() => {
-          opacity += 0.01;
-          document.body.style.opacity = opacity;
-          if (opacity >= 1) clearInterval(interval);
-        }, 60);
-      };
-    </script>
+
 
   </body>
 </html>
