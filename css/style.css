@@ -449,7 +449,7 @@ nav.menu + div {
 
 /* Corpo */
 .norton-body {
-    font-size: 18px;
+    font-size: clamp(18px, 8vw, 30px);
     background: #000080;
     color: #00FFFF;
     height: 100vh;
