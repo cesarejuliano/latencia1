@@ -430,3 +430,184 @@ nav.menu + div {
     position: relative;
   }
 }
+
+/* Norton Commander Style CSS */
+
+.norton-body, .norton-menu, .norton-menu-item, 
+.norton-panel, .norton-panel-header, .norton-panel-footer, 
+.norton-file-list, .norton-file-item {
+    font-family: 'VT323', monospace !important;
+}
+
+
+/* Reset e box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corpo */
+.norton-body {
+    font-size: 14px;
+    background: #000080;
+    color: #00FFFF;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Container Norton escondido por padrão */
+.norton-container {
+    display: none;
+    flex-direction: column;
+    height: calc(100vh - 40px);
+    margin-top: 0;
+}
+
+/* Menu Superior */
+.norton-menu {
+    background: #000080;
+    padding: 2px 8px;
+    border-bottom: 1px solid #00FFFF;
+    font-weight: bold;
+}
+
+.norton-menu-item {
+    display: inline-block;
+    margin-right: 20px;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.norton-menu-item:hover {
+    color: #FFFF00;
+}
+
+.norton-menu-item.active {
+    color: #FFFF00;
+    background: #008080;
+    padding: 2px 8px;
+}
+
+/* Área Principal com Painéis */
+.norton-main-area {
+    flex: 1;
+    display: flex;
+    background: #000080;
+}
+
+.norton-panel {
+    flex: 1;
+    border: 2px solid #00FFFF;
+    margin: 2px;
+    background: #000040;
+    display: flex;
+    flex-direction: column;
+}
+
+.norton-panel.active {
+    border-color: #FFFF00;
+}
+
+.norton-panel-header {
+    background: #008080;
+    color: #FFFFFF;
+    padding: 4px 8px;
+    border-bottom: 1px solid #00FFFF;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.norton-panel-path {
+    color: #FFFF00;
+}
+
+.norton-panel-info {
+    font-size: 12px;
+}
+
+/* Lista de Arquivos */
+.norton-file-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px;
+    background: #000040;
+}
+
+.norton-file-item {
+    display: flex;
+    padding: 1px 4px;
+    cursor: pointer;
+}
+
+.norton-file-item:hover {
+    background: #004080;
+}
+
+.norton-file-item.selected {
+    background: #008080;
+    color: #FFFFFF;
+}
+
+.norton-file-name {
+    flex: 1;
+    min-width: 0;
+}
+
+.norton-file-duration {
+    width: 80px;
+    text-align: right;
+    margin-right: 8px;
+}
+
+.norton-file-date {
+    width: 120px;
+}
+
+/* Rodapé */
+.norton-panel-footer {
+    background: #008080;
+    color: #FFFFFF;
+    padding: 2px 8px;
+    border-top: 1px solid #00FFFF;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Scrollbar personalizada */
+.norton-file-list::-webkit-scrollbar {
+    width: 12px;
+}
+
+.norton-file-list::-webkit-scrollbar-track {
+    background: #000080;
+}
+
+.norton-file-list::-webkit-scrollbar-thumb {
+    background: #008080;
+    border: 1px solid #00FFFF;
+}
+
+.norton-file-list::-webkit-scrollbar-thumb:hover {
+    background: #00FFFF;
+}
+
+/* Botão Play Norton */
+#playNorton {
+    font-size: clamp(96px, 12vh, 128px);
+    background: none;
+    border: none;
+    color: #00FFFF;
+    cursor: pointer;
+    display: block;
+}
+
+.norton-audio-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 21vh;
+    height: calc(100vh - 40px);
+}
