@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Dois violões</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <meta property="og:title" content="Dois Violões — Latência" />
+    <meta property="og:description" content="Episódio da série Latência por César & Juliano." />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/thumbs/index-previa.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/encavalada.html" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  
+  <body class="norton-body">
+    <!-- Norton Menu sempre visível -->
+    <div class="norton-menu">
+        <a href="index.html" class="norton-menu-item active">Episódios</a>
+        <a href="latencia.html" class="norton-menu-item">Latência</a>
+        <a href="duo.html" class="norton-menu-item">César & Juliano</a>
+    </div>
+
+    <!-- Botão de play centralizado -->
+    <main class="norton-audio-container">
+      <button id="playNorton">▶️</button>
+    </main>
+
+    <!-- TUDO ESCONDIDO - Norton Commander Interface -->
+    <div class="norton-container" style="display:none;">
+        <!-- Área Principal -->
+        <div class="norton-main-area">
+            <!-- Painel Esquerdo - César -->
+            <div class="norton-panel active">
+                <div class="norton-panel-header">
+                    <span class="norton-panel-path">C:\CESAR\</span>
+                    <span class="norton-panel-info">5 files</span>
+                </div>
+                <div class="norton-file-list">
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">..                    </span>
+                        <span class="norton-file-duration">&lt;DIR&gt;</span>
+                        <span class="norton-file-date">21-04-20 14:23</span>
+                    </div>
+                    <div class="norton-file-item selected">
+                        <span class="norton-file-name">take_1.aif           </span>
+                        <span class="norton-file-duration">1:24</span>
+                        <span class="norton-file-date">21-04-20 15:30</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take_2.aif           </span>
+                        <span class="norton-file-duration">0:43</span>
+                        <span class="norton-file-date">25-04-20 16:15</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take_3.aif           </span>
+                        <span class="norton-file-duration">1:16</span>
+                        <span class="norton-file-date">28-04-20 10:45</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take_4.aif           </span>
+                        <span class="norton-file-duration">0:40</span>
+                        <span class="norton-file-date">02-05-20 11:20</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take_5.aif           </span>
+                        <span class="norton-file-duration">3:37</span>
+                        <span class="norton-file-date">07-05-20 14:50</span>
+                    </div>
+                </div>
+                <div class="norton-panel-footer">
+                    <span>5 audio files</span>
+                    <span>Total: 7:40</span>
+                </div>
+            </div>
+
+            <!-- Painel Direito - Juliano -->
+            <div class="norton-panel">
+                <div class="norton-panel-header">
+                    <span class="norton-panel-path">J:\JULIANO\</span>
+                    <span class="norton-panel-info">5 files</span>
+                </div>
+                <div class="norton-file-list">
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">..                    </span>
+                        <span class="norton-file-duration">&lt;DIR&gt;</span>
+                        <span class="norton-file-date">21-04-20 14:23</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take01.wav           </span>
+                        <span class="norton-file-duration">1:32</span>
+                        <span class="norton-file-date">21-04-20 15:32</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take02.wav           </span>
+                        <span class="norton-file-duration">0:47</span>
+                        <span class="norton-file-date">25-04-20 16:18</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take03.wav           </span>
+                        <span class="norton-file-duration">1:08</span>
+                        <span class="norton-file-date">28-04-20 10:48</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take04.wav           </span>
+                        <span class="norton-file-duration">1:08</span>
+                        <span class="norton-file-date">02-05-20 11:25</span>
+                    </div>
+                    <div class="norton-file-item">
+                        <span class="norton-file-name">take05.wav           </span>
+                        <span class="norton-file-duration">3:04</span>
+                        <span class="norton-file-date">07-05-20 14:55</span>
+                    </div>
+                </div>
+                <div class="norton-panel-footer">
+                    <span>5 audio files</span>
+                    <span>Total: 7:39</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REMOVIDO - Botão swap comentado
+    <button id="swapButton" style="display:none !important;">🎭</button>
+    -->
+
+    <script>
+        // Seu código original de áudio
+        const cAudios = ['c1.mp3', 'c2.mp3', 'c3.mp3', 'c4.mp3', 'c5.mp3'];
+        const jAudios = ['j1.mp3', 'j2.mp3', 'j3.mp3', 'j4.mp3', 'j5.mp3'];
+
+        const durations = {
+            'c1.mp3': 84, 'j1.mp3': 92,
+            'c2.mp3': 43, 'j2.mp3': 47,
+            'c3.mp3': 76, 'j3.mp3': 68,
+            'c4.mp3': 40, 'j4.mp3': 68,
+            'c5.mp3': 217,'j5.mp3': 184
+        };
+
+        let currentCIndex = null;
+        let currentJIndex = null;
+        let audioC = new Audio();
+        let audioJ = new Audio();
+        audioC.volume = 1;
+        audioJ.volume = 1;
+
+        const playNorton = document.getElementById('playNorton');
+        const audioContainer = document.querySelector('.norton-audio-container');
+        const nortonContainer = document.querySelector('.norton-container');
+
+
+        function showNortonInterface() {
+            nortonContainer.style.display = 'flex';
+            audioContainer.style.display = 'none';
+        }
+
+
+        // Seu código de áudio original
+        function getRandomIndex(excludeIndex, max) {
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * max);
+            } while (idx === excludeIndex);
+            return idx;
+        }
+
+        function randomStartTime(duration) {
+            return Math.random() * duration * 0.7;
+        }
+
+        function playPair(cIndex = null) {
+            if (cIndex === null) {
+                cIndex = Math.floor(Math.random() * cAudios.length);
+            }
+            currentCIndex = cIndex;
+            currentJIndex = cIndex;
+
+            audioC.src = `audios/${cAudios[currentCIndex]}`;
+            audioJ.src = `audios/${jAudios[currentJIndex]}`;
+
+            audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
+            audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
+
+            audioC.play();
+            audioJ.play();
+
+            audioC.onended = () => {
+                const nextCIndex = getRandomIndex(currentCIndex, cAudios.length);
+                currentCIndex = nextCIndex;
+                audioC.src = `audios/${cAudios[currentCIndex]}`;
+                audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
+                audioC.play();
+            };
+
+            audioJ.onended = () => {
+                currentJIndex = currentCIndex;
+                audioJ.src = `audios/${jAudios[currentJIndex]}`;
+                audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
+                audioJ.play();
+            };
+        }
+
+        playNorton.addEventListener('click', function () {
+            playPair(); // inicia os áudios
+            this.style.display = 'none';      // botão some
+            nortonContainer.style.display = 'flex'; // mostra a interface
+            audioContainer.style.display = 'none'; 
+            nortonContainer.style.display = 'flex'; // Norton aparece
+        });
+
+
+
+
+        // Funcionalidade Norton (navegação nos painéis)
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileItems = document.querySelectorAll('.norton-file-item');
+            const panels = document.querySelectorAll('.norton-panel');
+            
+            fileItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const activePanel = document.querySelector('.norton-panel.active');
+                    activePanel.querySelectorAll('.norton-file-item').forEach(f => f.classList.remove('selected'));
+                    item.classList.add('selected');
+                });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    panels.forEach(panel => panel.classList.toggle('active'));
+                }
+            });
+        });
+    </script>
+  </body>
+</html>
