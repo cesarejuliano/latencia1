@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Dois depois</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <meta property="og:title" content="Dois depois — Latência" />
+    <meta property="og:description" content="Episódio da série Latência por César & Juliano." />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/thumbs/index-previa.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/encavalada.html" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  
+  <body class="norton-body">
+    <!-- Norton Menu sempre visível -->
+    <div class="norton-menu">
+        <a href="index.html" class="norton-menu-item active">Episódios</a>
+        <a href="latencia.html" class="norton-menu-item">Latência</a>
+        <a href="duo.html" class="norton-menu-item">César & Juliano</a>
+    </div>
+
+    <!-- Botão de play centralizado -->
+    <main class="norton-audio-container">
+      <button id="playNorton">{CLICK TO PLAY}</button>
+    </main>
+
+    <!-- TUDO ESCONDIDO - Norton Commander Interface -->
+    <div class="norton-container" style="display:none;">
+      <!-- Área Principal -->
+      <div class="norton-main-area" style="flex-direction: column;">
+          <!-- Painel - César -->
+          <div class="norton-panel active" id="panel-cesar">
+            <div class="norton-panel-header">
+              <span class="norton-panel-path">C:\CESAR\</span>
+              <span class="norton-panel-info">7 files</span>
+            </div>
+
+            <div class="norton-file-list">
+
+              <div class="norton-file-item" id="c-row-1">
+                <span class="norton-file-name">take_1.aif</span>
+                <span class="norton-file-duration" id="c-time-1">01:24</span>
+                <span class="norton-file-date">APR-21-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="c-row-2">
+                <span class="norton-file-name">take_2.aif</span>
+                <span class="norton-file-duration" id="c-time-2">00:43</span>
+                <span class="norton-file-date">APR-25-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="c-row-3">
+                <span class="norton-file-name">take_3.aif</span>
+                <span class="norton-file-duration" id="c-time-3">01:16</span>
+                <span class="norton-file-date">APR-28-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="c-row-4">
+                <span class="norton-file-name">take_4.aif</span>
+                <span class="norton-file-duration" id="c-time-4">00:40</span>
+                <span class="norton-file-date">MAY-02-2020</span>
+              </div>
+              
+              <div class="norton-file-item" id="c-row-5">
+                <span class="norton-file-name">take_5.aif</span>
+                <span class="norton-file-duration" id="c-time-5">01:15</span>
+                <span class="norton-file-date">MAY-07-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="c-row-6">
+                <span class="norton-file-name">take_6.aif</span>
+                <span class="norton-file-duration" id="c-time-6">01:15</span>
+                <span class="norton-file-date">MAY-07-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="c-row-7">
+                <span class="norton-file-name">take_7.aif</span>
+                <span class="norton-file-duration" id="c-time-7">01:25</span>
+                <span class="norton-file-date">MAY-07-2020</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Painel - Juliano -->
+          <div class="norton-panel" id="panel-juliano">
+            <div class="norton-panel-header">
+              <span class="norton-panel-path">J:\JULIANO\</span>
+              <span class="norton-panel-info">7 files</span>
+            </div>
+
+            <div class="norton-file-list">
+
+              <div class="norton-file-item" id="j-row-1">
+                <span class="norton-file-name">take01.wav</span>
+                <span class="norton-file-duration" id="j-time-1">01:32</span>
+                <span class="norton-file-date">APR-21-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="j-row-2">
+                <span class="norton-file-name">take02.wav</span>
+                <span class="norton-file-duration" id="j-time-2">00:47</span>
+                <span class="norton-file-date">APR-25-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="j-row-3">
+                <span class="norton-file-name">take03.wav</span>
+                <span class="norton-file-duration" id="j-time-3">01:08</span>
+                <span class="norton-file-date">APR-28-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="j-row-4">
+                <span class="norton-file-name">take04.wav</span>
+                <span class="norton-file-duration" id="j-time-4">01:08</span>
+                <span class="norton-file-date">MAY-02-2020</span>
+              </div>
+              
+              <div class="norton-file-item" id="j-row-5">
+                <span class="norton-file-name">take05.wav</span>
+                <span class="norton-file-duration" id="j-time-5">00:57</span>
+                <span class="norton-file-date">MAY-07-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="j-row-6">
+                <span class="norton-file-name">take06.wav</span>
+                <span class="norton-file-duration" id="j-time-6">00:17</span>
+                <span class="norton-file-date">MAY-07-2020</span>
+              </div>
+
+              <div class="norton-file-item" id="j-row-7">
+                <span class="norton-file-name">take07.wav</span>
+                <span class="norton-file-duration" id="j-time-7">00:51</span>
+                <span class="norton-file-date">MAY-07-2020</span>
+              </div>
+
+            </div>
+          </div>
+
+
+              <!-- CRONÔMETRO GLOBAL -->
+              <div class="norton-panel-footer" style="justify-content:center;">
+                <span id="global-timer">00:00:00</span>
+              </div>
+          </div>
+      </div>
+
+    <script>
+        // Seu código original de áudio
+        const cAudios = ['c1.mp3', 'c2.mp3', 'c3.mp3', 'c4.mp3', 'ce5.mp3', 'ce6.mp3', 'ce7.mp3'];
+        const jAudios = ['j1.mp3', 'j2.mp3', 'j3.mp3', 'j4.mp3', 'ju5.mp3', 'ju6.mp3', 'ju7.mp3'];
+
+        const durations = {
+          'c1.mp3': 84, 'j1.mp3': 92,
+          'c2.mp3': 43, 'j2.mp3': 47,
+          'c3.mp3': 76, 'j3.mp3': 68,
+          'c4.mp3': 40, 'j4.mp3': 68,
+          'ce5.mp3': 75, 'ju5.mp3': 57,
+          'ce6.mp3': 85, 'ju6.mp3': 77,
+          'ce7.mp3': 60, 'ju7.mp3': 51
+        };
+
+        let currentCIndex = null;
+        let currentJIndex = null;
+        let audioC = new Audio();
+        let audioJ = new Audio();
+        audioC.volume = 0.8;
+        audioJ.volume = 1;
+      
+        let activeCTimeSpan = null;
+        let activeJTimeSpan = null;
+      
+        let mirrorTimeout = null; // mantém atraso do espelhamento
+
+        let globalStartTime = null;
+      
+        const playNorton = document.getElementById('playNorton');
+        const audioContainer = document.querySelector('.norton-audio-container');
+        const nortonContainer = document.querySelector('.norton-container');
+      
+        const cRows = document.querySelectorAll(
+          '#panel-cesar .norton-file-item'
+        );
+
+        const jRows = document.querySelectorAll(
+          '#panel-juliano .norton-file-item'
+        );
+
+        const globalTimerEl = document.getElementById("global-timer");
+
+        function showNortonInterface() {
+            nortonContainer.style.display = 'flex';
+            audioContainer.style.display = 'none';
+        }
+
+        // utilidades de tempo (2026)
+        function formatMMSS(seconds) {
+          const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+          const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+          return `${m}:${s}`;
+        }
+
+        function formatHHMMSS(seconds) {
+          const h = Math.floor(seconds / 3600).toString().padStart(2, "0");
+          const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, "0");
+          const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+          return `${h}:${m}:${s}`;
+        }
+
+
+        // Seu código de áudio original
+        function getRandomIndex(excludeIndex, max) {
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * max);
+            } while (idx === excludeIndex || idx === 0); // exclui c1/j1
+            return idx;
+        }
+
+        function getRandomByParity(currentIndex, max, excludeOne = true) {
+          const isEven = currentIndex % 2 === 0;
+          const candidates = [];
+
+          for (let i = 1; i < max; i++) { // começa em 2 → NUNCA chama c1/j1
+            if (i === currentIndex) continue;
+
+            if ((i % 2 === 0) === isEven) {
+              candidates.push(i);
+            }
+          }
+
+          return candidates[Math.floor(Math.random() * candidates.length)];
+        }
+      
+
+        function randomStartTime(duration) {
+            return Math.random() * duration * 0.6;//de 70% p/ 50%
+        }
+        
+        function clearSelection(rows) {
+          rows.forEach(row => row.classList.remove('selected'));
+        }
+        function activateRow(rows, index) {
+          if (index == null || !rows[index]) return null;
+
+          rows.forEach(r => r.classList.remove('selected'));
+
+          const row = rows[index];
+          row.classList.add('selected');
+
+          return row.querySelector('.norton-file-duration');
+        }
+
+        
+        /* ====== nova regra ====== */
+      
+      
+        function playC(index) {
+          currentCIndex = index;
+          activeCTimeSpan = activateRow(cRows, index);
+
+          audioC.src = `audios/${cAudios[index]}`;
+          audioC.currentTime = randomStartTime(durations[cAudios[index]]);
+          audioC.play();
+
+          audioC.onended = () => {
+            handleEnded('C', currentCIndex);
+          };
+        }
+
+        function playJ(index) {
+          currentJIndex = index;
+          activeJTimeSpan = activateRow(jRows, index);
+
+          audioJ.src = `audios/${jAudios[index]}`;
+          audioJ.currentTime = randomStartTime(durations[jAudios[index]]);
+          audioJ.play();
+
+          audioJ.onended = () => {
+            handleEnded('J', currentJIndex);
+          };
+        }
+
+        function randomBetween(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+      
+        function handleEnded(pkg, index) {
+          // 1. escolhe novo índice do MESMO pacote
+          const nextIndex =
+            pkg === 'C'
+              ? getRandomIndex(index, cAudios.length)
+              : getRandomIndex(index, jAudios.length);
+
+          // toca imediatamente o mesmo pacote
+          if (pkg === 'C') playC(nextIndex);
+          else playJ(nextIndex);
+          
+          // if (mirrorTimeout) clearTimeout(mirrorTimeout);
+          
+          const delay = randomBetween(3000, 9000);
+
+          // 2. agenda espelhamento do outro pacote
+          mirrorTimeout = setTimeout(() => {
+            if (pkg === 'C') {
+              audioJ.pause();
+              const mirroredIndex = getRandomByParity(nextIndex, jAudios.length);
+              playJ(mirroredIndex);
+            } else {
+              audioC.pause();
+              const mirroredIndex = getRandomByParity(nextIndex, cAudios.length);
+              playC(mirroredIndex);
+            }
+          }, delay);
+
+        }
+      
+        
+
+        // ===============================
+        // PRIMEIRO PLAY **** acertar o randonstarttime de c1/j1
+        // ===============================
+
+        function firstPlay() {
+          if (!globalStartTime) globalStartTime = Date.now();
+
+          const startPkg = Math.random() < 0.5 ? 'C' : 'J';
+          const startIndex = 0; // c1 / j1 como base (pode abrir depois)
+
+          if (startPkg === 'C') {
+            playC(startIndex);
+            setTimeout(() => playJ(startIndex), randomBetween(5000, 20000));
+          } else {
+            playJ(startIndex);
+            setTimeout(() => playC(startIndex), randomBetween(5000, 20000));
+          }
+        }
+
+        /* ===============================
+           INTERFACE
+        ================================ */
+
+        playNorton.addEventListener('click', function () {
+          firstPlay();
+          this.style.display = 'none';
+          nortonContainer.style.display = 'flex';
+          audioContainer.style.display = 'none';
+        });
+
+        /* ===============================
+           LOOP DE ATUALIZAÇÃO
+        ================================ */
+
+        setInterval(() => {
+          if (!audioC.paused && activeCTimeSpan) {
+            activeCTimeSpan.textContent = formatMMSS(audioC.currentTime);
+          }
+
+          if (!audioJ.paused && activeJTimeSpan) {
+            activeJTimeSpan.textContent = formatMMSS(audioJ.currentTime);
+          }
+
+          if (globalStartTime) {
+            const elapsed = (Date.now() - globalStartTime) / 1000;
+            globalTimerEl.textContent = formatHHMMSS(elapsed);
+          }
+        }, 250);
+        /* LETS PLAY THAT
+        function playPair(cIndex = null) {
+            if (cIndex === null) {
+                cIndex = Math.floor(Math.random() * cAudios.length);
+            }
+            currentCIndex = cIndex;
+            currentJIndex = cIndex;
+          
+            activeCTimeSpan = activateRow(cRows, currentCIndex);
+            activeJTimeSpan = activateRow(jRows, currentJIndex);
+
+            audioC.src = `audios/${cAudios[currentCIndex]}`;
+            audioJ.src = `audios/${jAudios[currentJIndex]}`;
+
+            audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
+            audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
+
+            audioC.play();
+            //displayC.textContent = cFile;
+            //cFileEl.textContent = cAudios[currentCIndex];
+            //updateCDisplay(cAudios[currentCIndex]);
+
+            audioJ.play();
+            //displayJ.textContent = jFileEl;
+            //jFileEl.textContent = jAudios[currentJIndex];
+            //updateJDisplay(jAudios[currentJIndex]);
+
+            // (2026)
+            if (!globalStartTime) {
+              globalStartTime = Date.now();
+            }
+
+            //cFileEl.textContent = cAudios[currentCIndex];
+            //cDateEl.textContent = fileDates[cAudios[currentCIndex]];
+
+            //jFileEl.textContent = jAudios[currentJIndex];
+            //jDateEl.textContent = fileDates[jAudios[currentJIndex]];
+
+            //continução (2025)
+            audioC.onended = () => {
+              const nextCIndex = getRandomIndex(currentCIndex, cAudios.length);
+              currentCIndex = nextCIndex;
+
+              activeCTimeSpan = activateRow(cRows, currentCIndex);
+
+              audioC.src = `audios/${cAudios[currentCIndex]}`;
+              audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
+              audioC.play();
+            };
+
+            audioJ.onended = () => {
+              const nextJIndex = getRandomIndex(currentJIndex, jAudios.length);
+              currentJIndex = nextJIndex;
+
+              activeJTimeSpan = activateRow(jRows, currentJIndex);
+
+              audioJ.src = `audios/${jAudios[currentJIndex]}`;
+              audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
+              audioJ.play();
+            };
+
+        }
+
+        playNorton.addEventListener('click', function () {
+            playPair(); // inicia os áudios
+            this.style.display = 'none';      // botão some
+            nortonContainer.style.display = 'flex'; // mostra a interface
+            audioContainer.style.display = 'none';
+        });
+      
+        //loop de atualização continua
+        setInterval(() => {
+          if (!audioC.paused && activeCTimeSpan) {
+            activeCTimeSpan.textContent = formatMMSS(audioC.currentTime);
+          }
+
+          if (!audioJ.paused && activeJTimeSpan) {
+            activeJTimeSpan.textContent = formatMMSS(audioJ.currentTime);
+          }
+          
+          /*if (!audioC.paused) {
+            cTimeEl.textContent = formatMMSS(audioC.currentTime);
+          }
+          if (!audioJ.paused) {
+            jTimeEl.textContent = formatMMSS(audioJ.currentTime);
+          }
+          if (globalStartTime) {
+            const elapsed = (Date.now() - globalStartTime) / 1000;
+            globalTimerEl.textContent = formatHHMMSS(elapsed);
+          }
+        }, 250);*/
+        
+      
+        
+    </script>
+  </body>
+</html>
