@@ -523,9 +523,11 @@ nav.menu + div {
     color: #FFFF00;
 }
 
-.norton-panel-info {
-    font-size: 12px;
+.norton-panel-info,
+#global-timer {
+  font-size: clamp(18px, 2.4vw, 28px);
 }
+
 
 /* Lista de Arquivos */
 .norton-file-list {
@@ -537,8 +539,10 @@ nav.menu + div {
 
 .norton-file-item {
     display: flex;
+    width: 100%;
     padding: 1px 4px;
     cursor: pointer;
+    /*align-items: center;*/
 }
 
 .norton-file-item:hover {
@@ -551,18 +555,23 @@ nav.menu + div {
 }
 
 .norton-file-name {
-    flex: 1;
-    min-width: 0;
+    flex: 0 0 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .norton-file-duration {
-    width: 80px;
-    text-align: right;
+    width: 0 0 20%;
+    text-align: center;
     margin-right: 8px;
+    white-space: nowrap;
 }
 
 .norton-file-date {
-    width: 120px;
+    width: 0 0 40%;
+    text-align: right;
+    white-space: nowrap;
 }
 
 /* Rodapé */
@@ -596,7 +605,7 @@ nav.menu + div {
 
 /* Botão Play Norton */
 #playNorton {
-    font-size: clamp(96px, 12vh, 128px);
+    font-size: clamp(30px, 10vh, 60px);
     background: none;
     border: none;
     color: #00FFFF;
