@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELECTRIC PULSE</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .mpc-body {
+            background-color: #0f0f0f;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+            width: 340px;
+            position: relative;
+        }
+
+        /* Seção Power On - Agora toda ela é clicável */
+        .power-container {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            z-index: 10;
+            padding: 5px;
+        }
+
+        .power-led {
+            width: 16px;
+            height: 16px;
+            background-color: #300;
+            border: 2px solid #444;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* LED aceso */
+        .on .power-led {
+            background-color: #ff3333;
+            box-shadow: 0 0 12px #ff3333;
+            border-color: #ff6666;
+        }
+
+        .power-label {
+            color: #444;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            user-select: none;
+        }
+
+        .on .power-label { color: #888; }
+
+        .mpc-header {
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 16px;
+            margin-bottom: 25px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* Grid e Pads */
+        .pad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            opacity: 0.2; 
+            pointer-events: none; 
+            transition: opacity 0.5s ease;
+        }
+
+        .on .pad-grid {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .pad {
+            background-color: #2b2b2b;
+            aspect-ratio: 1 / 1;
+            border-radius: 6px;
+            border: none;
+            box-shadow: 0 4px 0 #000;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #555;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.05s;
+        }
+
+        .pad.active {
+            background-color: #ff3333;
+            box-shadow: 0 1px 0 #000, 0 0 20px rgba(255, 51, 51, 0.8);
+            transform: translateY(3px);
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="mpc-body" id="mpcMain">
+        <div class="power-container" id="powerTrigger">
+            <div class="power-led"></div>
+            <span class="power-label">Power On</span>
+        </div>
+
+        <div class="mpc-header">Electric Pulse</div>
+        
+        <div class="pad-grid">
+            <button class="pad" data-pad="1">I</button>
+            <button class="pad" data-pad="2">II</button>
+            <button class="pad" data-pad="3">III</button>
+            <button class="pad" data-pad="4">IV</button>
+            <button class="pad" data-pad="5">V</button>
+            <button class="pad" data-pad="6">VI</button>
+            <button class="pad" data-pad="7">VII</button>
+            <button class="pad" data-pad="8">VIII</button>
+            <button class="pad" data-pad="9">IX</button>
+        </div>
+    </div>
+
+    <script>
+        const soundMap = {
+            1: 'audios/ausculta/aus-001.mp3',
+            2: 'audios/ausculta/aus-002.mp3',
+            3: 'audios/ausculta/aus-003.mp3',
+            4: 'audios/ausculta/aus-004.mp3',
+            5: 'audios/ausculta/aus-005.mp3',
+            6: 'audios/ausculta/aus-006.mp3',
+            7: 'audios/ausculta/aus-007.mp3',
+            8: 'audios/ausculta/aus-008.mp3',
+            9: 'audios/ausculta/aus-009.mp3'
+        };
+
+        let isPowered = false;
+        let currentAudio = null; 
+        let currentPadId = null;
+        let brejoAudio = null;
+
+        const powerTrigger = document.getElementById('powerTrigger');
+        const mpcMain = document.getElementById('mpcMain');
+        const pads = document.querySelectorAll('.pad');
+
+        // LIGA O APARELHO
+        powerTrigger.addEventListener('click', () => {
+            if (!isPowered) {
+                isPowered = true;
+                mpcMain.classList.add('on');
+                
+                // Inicia o brejo aqui dentro
+                brejoAudio = new Audio('audios/ausculta/brejo.mp3');
+                brejoAudio.loop = true;
+                brejoAudio.play().catch(e => console.log("Áudio liberado"));
+                
+                console.log("ELECTRIC PULSE ATIVADO");
+            }
+        });
+
+        function triggerPad(padElement) {
+            if (!isPowered) return;
+            const padId = padElement.getAttribute('data-pad');
+
+            if (currentAudio) {
+                // Se for o MESMO pad: apenas reinicia o som. 
+                // A luz continua acesa porque não mexemos nas classes.
+                if (currentPadId === padId) {
+                    currentAudio.currentTime = 0;
+                    currentAudio.play();
+                    return; 
+                }
+
+                // Se for um pad DIFERENTE: para o anterior e apaga as luzes.
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                document.querySelectorAll('.pad').forEach(p => p.classList.remove('active'));
+            }
+
+            // Toca o novo som e acende a luz
+            const audio = new Audio(soundMap[padId]);
+            audio.loop = true;
+            audio.play().then(() => {
+                currentAudio = audio;
+                currentPadId = padId;
+                padElement.classList.add('active');
+            });
+        }
+
+        pads.forEach(pad => {
+            pad.addEventListener('mousedown', () => triggerPad(pad));
+        });
+
+        // Teclado
+        document.addEventListener('keydown', (e) => {
+            if (!isPowered) return;
+            if (e.key >= '1' && e.key <= '9') {
+                const target = document.querySelector(`.pad[data-pad="${e.key}"]`);
+                if (target) triggerPad(target);
+            }
+        });
+    </script>
+</body>
+</html>
