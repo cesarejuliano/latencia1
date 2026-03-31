@@ -661,6 +661,11 @@ nav.menu + div {
     animation: blink 1.5s steps(1) infinite;
 }
 
+#playNorton.pressed {
+  background: #00FFFF;
+  color: #000080;
+}
+
 .norton-audio-container {
     display: flex;
     justify-content: center;
