@@ -279,21 +279,22 @@ nav.menu + div {
   transform: rotate(0deg);
 }
 
-a:link {
+.duo-footer a:link {
   color: silver;
 }
 
-a:visited {
+.duo-footer a:visited {
   color: gray;
 }
 
-a:hover {
+.duo-footer a:hover {
   color: white;
 }
 
-a:active {
+.duo-footer a:active {
   color: whitesmoke;
 }
+
 .ninfas-background img {
   position: fixed;
   top: 0;
