@@ -472,7 +472,7 @@ nav.menu + div {
 
 .norton-body, .norton-menu, .norton-menu-item, 
 .norton-panel, .norton-panel-header, .norton-panel-footer, 
-.norton-file-list, .norton-file-item {
+.norton-file-list, .norton-file-item, playNorton {
     font-family: 'VT323', monospace !important;
 }
 
@@ -641,13 +641,24 @@ nav.menu + div {
 }
 
 /* Botão Play Norton */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.8; }
+}
+
 #playNorton {
+    font-family: 'VT323', monospace !important;
     font-size: clamp(30px, 10vh, 60px);
-    background: none;
-    border: none;
+    background: #008080;
     color: #00FFFF;
+    border: 2px solid #00FFFF;
+    padding: 8px 50px;
     cursor: pointer;
+    outline: none;
     display: block;
+    box-shadow:  inset -2px -2px 0 #000040,
+    inset 2px 2px 0 #00FFFF;
+    animation: blink 1.5s steps(1) infinite;
 }
 
 .norton-audio-container {
@@ -716,6 +727,15 @@ nav.menu + div {
     object-fit: cover;
   }
 
+  .norton-menu a[href="duo.html"] {
+   font-size: 0; /* esconde texto original */
+  }
+
+  .norton-menu a[href="duo.html"]::after {
+    content: "C&J";
+    font-size: clamp(18px, 8vw, 30px);
+  }
+  
   .norton-file-date {
     display: none;
   }
