@@ -16,10 +16,13 @@
 
   </head>
   <body class="fade-in">
-    <div class="insuflaras-background">
+    <!--<div class="insuflaras-background">
       <video autoplay muted loop playsinline>
-        <source src="videos/boneco.mp4" type="video/mp4">
+        <source src="videos/luminar.mp4" type="video/mp4">
       </video>
+    </div>-->
+    <div class="insuflaras-imgbackground">
+      <img src="imagens/varzea.jpg" alt="">
     </div>
     <!--<nav class="menu">
       <ul>
@@ -44,7 +47,7 @@
         Seu navegador não suporta vídeos HTML5.
       </video>
     </div>
-    <script>
+    <!--<script>
       document.addEventListener("DOMContentLoaded", () => {
         const playBtn = document.getElementById("playButton");
         const video = document.getElementById("insuflarasVideo");
@@ -63,7 +66,32 @@
       toggle.addEventListener("click", () => {
         items.classList.toggle("active");
       });
-    </script>
+    </script>-->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // PLAY VIDEO
+        const playBtn = document.getElementById("playButton");
+        const video = document.getElementById("insuflarasVideo");
+
+        if (playBtn && video) {
+          playBtn.addEventListener("click", () => {
+            playBtn.style.display = "none";
+            video.style.display = "block";
+            video.play();
+          });
+        }
+
+        // MENU TOGGLE
+        const toggle = document.getElementById("menu-toggle");
+        const items = document.getElementById("menu-items");
+
+        if (toggle && items) {
+          toggle.addEventListener("click", () => {
+            items.classList.toggle("active");
+          });
+        }
+      });
+      </script>
 
   </body>
 </html>

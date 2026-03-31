@@ -71,7 +71,7 @@
       <a class="episodio" href="doisdepois.html">
         <img src="thumbs/gatos3.jpg" alt="Dois depois">
         <h2>DOIS DEPOIS</h2>
-        <p>uma frase aqui<br>resume o episódio</p> 
+        <p>tocar à distância,<br>sem crase</p> 
       </a>
       <!--
       <a class="episodio" href="golfinho.html">
@@ -81,6 +81,53 @@
       </a>-->
     </section>
     
-    <script src="js/script.js"></script>
+    <!--<script src="js/script.js"></script>-->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+
+        // --- ARRAY DE IMAGENS ---
+        var imagens = [];
+        for (var i = 1; i <= 21; i++) {
+          var numero = i < 10 ? '0' + i : i;
+          imagens.push('thumbs/ninfas' + numero + '.jpg');
+        }
+
+        // --- IMAGEM DO DIA ---
+        function imagemDoDia() {
+          var data = new Date();
+          var dia = data.getDate();
+          var index = (dia - 1) % imagens.length;
+          return imagens[index];
+        }
+
+        // --- FADE-IN (primeira visita) ---
+        function aplicarFadeIn() {
+          var body = document.body;
+          if (!sessionStorage.getItem('jaVisitou')) {
+            body.classList.add('fade-in');
+            sessionStorage.setItem('jaVisitou', 'true');
+          }
+        }
+
+        aplicarFadeIn();
+
+        // --- APLICA IMAGEM NO CARD NINFAS ---
+        var imgNinfas = document.getElementById('thumb-ninfas');
+        if (imgNinfas) {
+          imgNinfas.src = imagemDoDia();
+        }
+
+        // --- MENU HAMBURGUER ---
+        var toggle = document.getElementById("menu-toggle");
+        var items = document.getElementById("menu-items");
+
+        if (toggle && items) {
+          toggle.addEventListener("click", function () {
+            items.classList.toggle("active");
+          });
+        }
+
+      });
+      </script>
   </body>
 </html>
