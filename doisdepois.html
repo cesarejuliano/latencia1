@@ -348,14 +348,77 @@
         /* ===============================
            INTERFACE
         ================================ */
+        /* AUDIO CONTEXT (único) */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        playNorton.addEventListener('click', function () {
-          firstPlay();
-          this.style.display = 'none';
-          nortonContainer.style.display = 'flex';
-          audioContainer.style.display = 'none';
+        function beep(freq = 400, duration = 100, volume = 0.1) {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'square';
+          osc.frequency.value = freq;
+          gain.gain.value = volume;
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start();
+          setTimeout(() => osc.stop(), duration);
+        }
+
+        function doubleBeep(freq = 1000) {
+          beep(freq, 80);
+          setTimeout(() => beep(freq, 80), 150);
+        }
+
+        /* TOOLTIP NO CURSOR= */
+        const tip = document.createElement('div');
+        tip.style.position = 'fixed';
+        tip.style.pointerEvents = 'none';
+        tip.style.color = '#FFFF00';
+        tip.style.fontFamily = 'VT323';
+        tip.style.fontSize = 'clamp(18px, 8vw, 30px)';
+        tip.style.display = 'none';
+        tip.style.zIndex = 9999;
+        document.body.appendChild(tip);
+
+        function showCursorMsg(msg, e) {
+          tip.textContent = msg;
+          const x = Math.min(e.clientX + 10, window.innerWidth - 80);
+          const y = Math.min(e.clientY + 10, window.innerHeight - 30);
+          tip.style.left = x + 'px';
+          tip.style.top = y + 'px';
+          tip.style.display = 'block';
+
+          setTimeout(() => {
+            tip.style.display = 'none';
+          }, 1500);
+        }
+
+        /* CLICK NOS ARQUIVOS */
+        document.querySelectorAll('.norton-file-item').forEach(item=>{
+          item.addEventListener('click',(e)=>{
+            beep(400,60);
+            showCursorMsg('NO BUFFER',e);
+          });
         });
 
+        /* OTÃO PLAY (UNIFICADO)*/
+        // botão RUN
+        playNorton.addEventListener('click', function(){
+          const btn = this;
+
+          doubleBeep(1000);
+          firstPlay();
+          btn.classList.add('pressed');
+
+          setTimeout(()=>{
+            btn.style.display='none';
+            nortonContainer.style.display='flex';
+            audioContainer.style.display='none';
+          },2000);
+        });
+      
         /* ===============================
            LOOP DE ATUALIZAÇÃO
         ================================ */
@@ -374,99 +437,6 @@
             globalTimerEl.textContent = formatHHMMSS(elapsed);
           }
         }, 250);
-        /* LETS PLAY THAT
-        function playPair(cIndex = null) {
-            if (cIndex === null) {
-                cIndex = Math.floor(Math.random() * cAudios.length);
-            }
-            currentCIndex = cIndex;
-            currentJIndex = cIndex;
-          
-            activeCTimeSpan = activateRow(cRows, currentCIndex);
-            activeJTimeSpan = activateRow(jRows, currentJIndex);
-
-            audioC.src = `audios/${cAudios[currentCIndex]}`;
-            audioJ.src = `audios/${jAudios[currentJIndex]}`;
-
-            audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
-            audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
-
-            audioC.play();
-            //displayC.textContent = cFile;
-            //cFileEl.textContent = cAudios[currentCIndex];
-            //updateCDisplay(cAudios[currentCIndex]);
-
-            audioJ.play();
-            //displayJ.textContent = jFileEl;
-            //jFileEl.textContent = jAudios[currentJIndex];
-            //updateJDisplay(jAudios[currentJIndex]);
-
-            // (2026)
-            if (!globalStartTime) {
-              globalStartTime = Date.now();
-            }
-
-            //cFileEl.textContent = cAudios[currentCIndex];
-            //cDateEl.textContent = fileDates[cAudios[currentCIndex]];
-
-            //jFileEl.textContent = jAudios[currentJIndex];
-            //jDateEl.textContent = fileDates[jAudios[currentJIndex]];
-
-            //continução (2025)
-            audioC.onended = () => {
-              const nextCIndex = getRandomIndex(currentCIndex, cAudios.length);
-              currentCIndex = nextCIndex;
-
-              activeCTimeSpan = activateRow(cRows, currentCIndex);
-
-              audioC.src = `audios/${cAudios[currentCIndex]}`;
-              audioC.currentTime = randomStartTime(durations[cAudios[currentCIndex]]);
-              audioC.play();
-            };
-
-            audioJ.onended = () => {
-              const nextJIndex = getRandomIndex(currentJIndex, jAudios.length);
-              currentJIndex = nextJIndex;
-
-              activeJTimeSpan = activateRow(jRows, currentJIndex);
-
-              audioJ.src = `audios/${jAudios[currentJIndex]}`;
-              audioJ.currentTime = randomStartTime(durations[jAudios[currentJIndex]]);
-              audioJ.play();
-            };
-
-        }
-
-        playNorton.addEventListener('click', function () {
-            playPair(); // inicia os áudios
-            this.style.display = 'none';      // botão some
-            nortonContainer.style.display = 'flex'; // mostra a interface
-            audioContainer.style.display = 'none';
-        });
-      
-        //loop de atualização continua
-        setInterval(() => {
-          if (!audioC.paused && activeCTimeSpan) {
-            activeCTimeSpan.textContent = formatMMSS(audioC.currentTime);
-          }
-
-          if (!audioJ.paused && activeJTimeSpan) {
-            activeJTimeSpan.textContent = formatMMSS(audioJ.currentTime);
-          }
-          
-          /*if (!audioC.paused) {
-            cTimeEl.textContent = formatMMSS(audioC.currentTime);
-          }
-          if (!audioJ.paused) {
-            jTimeEl.textContent = formatMMSS(audioJ.currentTime);
-          }
-          if (globalStartTime) {
-            const elapsed = (Date.now() - globalStartTime) / 1000;
-            globalTimerEl.textContent = formatHHMMSS(elapsed);
-          }
-        }, 250);*/
-        
-      
         
     </script>
   </body>
