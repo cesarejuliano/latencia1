@@ -61,23 +61,23 @@
               <div class="norton-file-item" id="c-row-4">
                 <span class="norton-file-name">dps_eu_vejo.aif</span>
                 <span class="norton-file-duration" id="c-time-4">00:40</span>
-                <span class="norton-file-date">MAY-02-2020</span>
+                <span class="norton-file-date">MAR-31-2026</span>
               </div>
               
               <div class="norton-file-item" id="c-row-5">
                 <span class="norton-file-name">esqueci_total.aif</span>
                 <span class="norton-file-duration" id="c-time-5">01:15</span>
-                <span class="norton-file-date">MAY-07-2020</span>
+                <span class="norton-file-date">MAY-04-2020</span>
               </div>
 
               <div class="norton-file-item" id="c-row-6">
-                <span class="norton-file-name">take_6.aif</span>
+                <span class="norton-file-name">vai_avisando.aif</span>
                 <span class="norton-file-duration" id="c-time-6">01:15</span>
                 <span class="norton-file-date">MAY-07-2020</span>
               </div>
 
               <div class="norton-file-item" id="c-row-7">
-                <span class="norton-file-name">take_7.aif</span>
+                <span class="norton-file-name">sem_nome.aif</span>
                 <span class="norton-file-duration" id="c-time-7">01:25</span>
                 <span class="norton-file-date">MAY-07-2020</span>
               </div>
@@ -95,7 +95,7 @@
             <div class="norton-file-list">
 
               <div class="norton-file-item" id="j-row-1">
-                <span class="norton-file-name">bora_marcar.wav</span>
+                <span class="norton-file-name">vamo_vendo.wav</span>
                 <span class="norton-file-duration" id="j-time-1">01:32</span>
                 <span class="norton-file-date">APR-21-2020</span>
               </div>
@@ -125,7 +125,7 @@
               </div>
 
               <div class="norton-file-item" id="j-row-6">
-                <span class="norton-file-name">take06.wav</span>
+                <span class="norton-file-name">vai_rolar.wav</span>
                 <span class="norton-file-duration" id="j-time-6">00:17</span>
                 <span class="norton-file-date">MAY-07-2020</span>
               </div>
@@ -153,13 +153,20 @@
         const jAudios = ['j1.mp3', 'j2.mp3', 'j3.mp3', 'j4.mp3', 'ju5.mp3', 'ju6.mp3', 'ju7.mp3'];
 
         const durations = {
-          'c1.mp3': 84, 'j1.mp3': 92,
-          'c2.mp3': 43, 'j2.mp3': 47,
-          'c3.mp3': 76, 'j3.mp3': 68,
-          'c4.mp3': 40, 'j4.mp3': 68,
-          'ce5.mp3': 75, 'ju5.mp3': 57,
-          'ce6.mp3': 85, 'ju6.mp3': 77,
-          'ce7.mp3': 60, 'ju7.mp3': 51
+          'c1.mp3': 45,
+          'c2.mp3': 40,
+          'c3.mp3': 73,
+          'c4.mp3': 35,
+          'ce5.mp3': 71,
+          'ce6.mp3': 85,
+          'ce7.mp3': 56,
+          'j1.mp3': 54,
+          'j2.mp3': 44,
+          'j3.mp3': 64,
+          'j4.mp3': 65,
+          'ju5.mp3': 52,
+          'ju6.mp3': 77,
+          'ju7.mp3': 50
         };
 
         let currentCIndex = null;
@@ -236,7 +243,7 @@
       
 
         function randomStartTime(duration) {
-            return Math.random() * duration * 0.6;//de 70% p/ 50%
+            return Math.random() * duration * 0.33;//de 70% p/ 50%
         }
         
         function clearSelection(rows) {
