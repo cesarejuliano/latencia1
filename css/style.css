@@ -139,7 +139,7 @@ nav.menu + div {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(0.1) contrast(1) brightness(2) blur(6px);
+  filter: blur(6px);
 }
 
 .texto-latencia {
@@ -279,15 +279,28 @@ nav.menu + div {
   transform: rotate(0deg);
 }
 
-.ninfas-background {
+a:link {
+  color: silver;
+}
+
+a:visited {
+  color: gray;
+}
+
+a:hover {
+  color: white;
+}
+
+a:active {
+  color: whitesmoke;
+}
+.ninfas-background img {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../imagens/ninfasfundo.jpg');
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
   z-index: -2;
 }
 
@@ -297,11 +310,17 @@ nav.menu + div {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  /*z-index: 10;*/
 }
 
+/*#audio {
+  display: none;
+}*/
+
 #audio {
-  display: none; /* esconde completamente */
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
 }
 
 #audio::-webkit-media-controls {
@@ -320,6 +339,44 @@ nav.menu + div {
 
 #playButton:hover {
   color: #BADA54;
+}
+
+#scrollLayer {
+  display: none;
+}
+
+.bloco:first-child {
+  height: 100vh;
+}
+
+/* cada bloco ocupa tela inteira */
+.bloco {
+  height: 120vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  transform: translateY(80px);
+  transition: opacity 13s ease, transform 3s ease;
+}
+
+/* estado visível */
+.bloco.visivel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* vídeo central */
+.bloco video {
+  width: clamp(220px, 40vw, 420px);
+  height: auto;
+  pointer-events: none;
+}
+
+/* primeiro bloco demora */
+.bloco.delay {
+  transition-delay: 13s; /* controla o “tempo de escavação inicial” */
 }
 
 #swapButton {
@@ -348,6 +405,21 @@ nav.menu + div {
   height: 100%;
   object-fit: cover;
   filter: contrast(1) brightness(1.33) blur(3px);
+}
+
+.insuflaras-imgbackground {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.insuflaras-imgbackground img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none;
 }
   
 .video-container {
@@ -393,42 +465,6 @@ nav.menu + div {
   border: none;
   color: #E0E0E0;
   cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .episodio {
-    width: 90vw;
-    margin: 0 auto 6vh;
-  }
-
-  .episodio img {
-    width: 100%;
-    height: auto;
-  }
-
-  #menu-items {
-    display: none;
-    flex-direction: column;
-    background-color: rgba(0,0,0,0.9);
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    padding: 1rem;
-  }
-
-  #menu-items.active {
-    display: flex;
-  }
-
-  #menu-toggle {
-    display: block;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
-  .menu {
-    position: relative;
-  }
 }
 
 /* Norton Commander Style CSS */
@@ -525,7 +561,7 @@ nav.menu + div {
 
 .norton-panel-info,
 #global-timer {
-  font-size: clamp(18px, 2.4vw, 28px);
+  font-size: clamp(18px, 2vw, 36px);
 }
 
 
@@ -619,4 +655,95 @@ nav.menu + div {
     align-items: flex-start;
     margin-top: 21vh;
     height: calc(100vh - 40px);
+}
+
+/* VERTICAL/MOBILE */
+@media (max-width: 768px) and (orientation: portrait){
+  .episodio {
+    width: 90vw;
+    margin: 0 auto 6vh;
+  }
+
+  .episodio img {
+    width: 100%;
+    height: auto;
+  }
+
+  #menu-items {
+    display: none;
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.9);
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    padding: 1rem;
+  }
+
+  #menu-items.active {
+    display: flex;
+  }
+
+  #menu-toggle {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .menu {
+    position: relative;
+  }
+  
+  
+  .latencia-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-60%, -50%);
+    width: 300%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px);
+  }
+  
+  .insuflaras-imgbackground img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    width: 100vh;
+    height: 100vw;
+    object-fit: cover;
+  }
+
+  .norton-file-date {
+    display: none;
+  }
+
+  /* redistribui espaço */
+  .norton-file-name {
+    flex: 0 0 70%;
+  }
+
+  .norton-file-duration {
+    flex: 0 0 30%;
+    text-align: c;
+  }
+
+
+  .norton-panel-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+  }
+
+  .norton-main-area {
+    padding-bottom: 40px; /* espaço pro cronômetro */
+  }
+
+  #global-timer {
+    font-size: clamp(22px, 7vw, 32px);
+  }
+
 }
