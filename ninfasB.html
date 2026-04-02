@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Ninfas</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Meta preview -->
+    <meta property="og:title" content="Ninfas — Latência" />
+    <meta property="og:description" content="Episódio da série Latência por César & Juliano." />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/thumbs/ninfas01.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/ninfas.html" />
+    <meta property="og:type" content="website" />
+    <!-- opcional para Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+  </head>
+  <body class="fade-in">
+    <div class="ninfas-background">
+      <img src="imagens/ninfasfundo.jpg" alt="Fundo Ninfas" />
+    </div>
+    <!--<nav class="menu">
+      <ul>
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>-->
+    <nav class="menu">
+      <button id="menu-toggle">☰</button>
+      <ul id="menu-items">
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>
+
+    <main class="conteudo-ninfas">
+      <!--<div class="audio-container">
+        <audio id="audio-ninfas" controls preload="auto">
+          <source src="audios/ninfas.mp3" type="audio/mp3" />
+          Seu navegador não suporta áudio. 
+        </audio>
+      </div>-->
+      <div class="audio-container">
+        <button id="playButton">▶️</button>
+        <audio id="audio" src="audios/ninfas.mp3"></audio>
+      </div>
+      <div class="scroll-layer">
+
+        <section class="bloco delay" id="bloco-1">
+          <video autoplay muted loop playsinline>
+            <source src="videos/anneteresa.mp4" type="video/mp4">
+          </video>
+        </section>
+        <section class="bloco" id="bloco-4">
+          <div id="grid-sogou" style="
+            columns: 3;
+            gap: 6px;
+            padding: 6px;
+            background: #111;
+          "></div>
+        </section>
+
+      </div>
+    </main>
+    <script>
+      document.body.style.opacity = 0;
+
+      window.addEventListener('load', () => {
+        let opacity = 0;
+
+        const fade = setInterval(() => {
+          opacity += 0.01;
+          document.body.style.opacity = opacity;
+          if (opacity >= 1) clearInterval(fade);
+        }, 60);
+
+        setTimeout(revelar, 3000);
+      });
+
+      const btn = document.getElementById('playButton');
+      const audio = document.getElementById('audio');
+
+      if (btn && audio) {
+        btn.addEventListener('click', () => {
+          audio.play();
+          btn.style.display = 'none';
+        });
+      }
+
+      const toggle = document.getElementById("menu-toggle");
+      const items = document.getElementById("menu-items");
+
+      if (toggle && items) {
+        toggle.addEventListener("click", () => {
+          items.classList.toggle("active");
+        });
+      }
+
+      const blocos = document.querySelectorAll('.bloco');
+
+      function revelar() {
+        const trigger = window.innerHeight * 0.8;
+
+        blocos.forEach(bloco => {
+          const top = bloco.getBoundingClientRect().top;
+          if (top < trigger) bloco.classList.add('visivel');
+        });
+      }
+
+      window.addEventListener('scroll', revelar);
+        const query = encodeURIComponent('蝉翼');
+        const sogouURL = `https://pic.sogou.com/pics?query=${query}`;
+        const proxy = `https://corsproxy.io/?${encodeURIComponent(sogouURL)}`;
+
+        fetch(proxy)
+          .then(r => r.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const imgs = doc.querySelectorAll('img');
+            const grid = document.getElementById('grid-sogou');
+
+            imgs.forEach(img => {
+              const src = img.src || img.getAttribute('data-src');
+              if (src && src.startsWith('http')) {
+                const el = document.createElement('img');
+                el.src = src;
+                el.style.cssText = 'width:100%; display:block; margin-bottom:6px; break-inside:avoid;';
+                grid.appendChild(el);
+              }
+            });
+
+            // fallback: procura URLs no HTML bruto
+            if (grid.children.length === 0) {
+              const matches = html.match(/https?:\/\/[^"']+\.(jpg|jpeg|png|webp)/g);
+              if (matches) {
+                [...new Set(matches)].forEach(src => {
+                  const el = document.createElement('img');
+                  el.src = src;
+                  el.style.cssText = 'width:100%; display:block; margin-bottom:6px; break-inside:avoid;';
+                  grid.appendChild(el);
+                });
+              }
+            }
+          })
+          .catch(err => console.error('Erro:', err));
+      </script>
+</body>
+</html>
