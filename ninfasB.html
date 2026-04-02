@@ -53,15 +53,18 @@
             <source src="videos/anneteresa.mp4" type="video/mp4">
           </video>
         </section>
+        <section class="bloco" id="bloco-2">
+          19:55
+        </section>
         <section class="bloco" id="bloco-4">
-          <div id="grid-sogou" style="
-            columns: 3;
-            gap: 6px;
-            padding: 6px;
-            background: #111;
+          <div id="grid-imagens" style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 4px;
+            background: #000;
           "></div>
         </section>
-
       </div>
     </main>
     <script>
@@ -110,42 +113,21 @@
       }
 
       window.addEventListener('scroll', revelar);
-        const query = encodeURIComponent('蝉翼');
-        const sogouURL = `https://pic.sogou.com/pics?query=${query}`;
-        const proxy = `https://corsproxy.io/?${encodeURIComponent(sogouURL)}`;
-
-        fetch(proxy)
-          .then(r => r.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const imgs = doc.querySelectorAll('img');
-            const grid = document.getElementById('grid-sogou');
-
-            imgs.forEach(img => {
-              const src = img.src || img.getAttribute('data-src');
-              if (src && src.startsWith('http')) {
-                const el = document.createElement('img');
-                el.src = src;
-                el.style.cssText = 'width:100%; display:block; margin-bottom:6px; break-inside:avoid;';
-                grid.appendChild(el);
-              }
+        const chave = '55284448-c3968ee1416862f04f7195e95';
+        const termo = 'cicada';
+        const url = `https://pixabay.com/api/?key=${chave}&q=${encodeURIComponent(termo)}&image_type=photo&per_page=100`;
+      
+        fetch(url)
+          .then(r => r.json())
+          .then(data => {
+            const grid = document.getElementById('grid-imagens');
+            data.hits.forEach(img => {
+              const el = document.createElement('img');
+              el.src = img.webformatURL;
+              el.style.cssText = 'width: calc(33% - 4px); object-fit: cover;';
+              grid.appendChild(el);
             });
-
-            // fallback: procura URLs no HTML bruto
-            if (grid.children.length === 0) {
-              const matches = html.match(/https?:\/\/[^"']+\.(jpg|jpeg|png|webp)/g);
-              if (matches) {
-                [...new Set(matches)].forEach(src => {
-                  const el = document.createElement('img');
-                  el.src = src;
-                  el.style.cssText = 'width:100%; display:block; margin-bottom:6px; break-inside:avoid;';
-                  grid.appendChild(el);
-                });
-              }
-            }
-          })
-          .catch(err => console.error('Erro:', err));
+          });
       </script>
 </body>
 </html>
