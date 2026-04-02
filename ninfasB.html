@@ -113,7 +113,10 @@
       }
 
       window.addEventListener('scroll', revelar);
-        const chave = '55284448-c3968ee1416862f04f7195e95';
+
+      // ROLAGEM DE IMAGENS
+      
+        /* const chave = '55284448-c3968ee1416862f04f7195e95';
         const termo = 'cicada';
         const url = `https://pixabay.com/api/?key=${chave}&q=${encodeURIComponent(termo)}&image_type=photo&per_page=100`;
       
@@ -127,7 +130,32 @@
               el.style.cssText = 'width: calc(33% - 4px); object-fit: cover;';
               grid.appendChild(el);
             });
-          });
+          });*/
+      
+          const query = encodeURIComponent('蝉翼');
+          const sogouAPI = `https://pic.sogou.com/napi/pc/searchList?mode=1&start=0&xml_len=48&query=${query}&channel=pc_pic&scene=pic_result`;
+          const proxy = `https://corsproxy.io/?${encodeURIComponent(sogouAPI)}`;
+        
+          fetch(proxy)
+            .then(r => r.json())
+            .then(data => {
+              console.log(data); // vamos ver a estrutura!
+              const grid = document.getElementById('grid-sogou');
+        
+              // tenta os caminhos mais comuns
+              const items = data.items || data.data?.items || data.results || [];
+              items.forEach(item => {
+                const src = item.pic_url || item.url || item.thumbUrl || item.imgUrl;
+                if (src) {
+                  const el = document.createElement('img');
+                  el.src = src;
+                  el.style.cssText = 'width: calc(33% - 4px); object-fit: cover;';
+                  grid.appendChild(el);
+                }
+              });
+            })
+            .catch(err => console.error('Erro:', err));
+        </script>
       </script>
 </body>
 </html>
