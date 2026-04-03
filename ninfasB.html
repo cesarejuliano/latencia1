@@ -48,7 +48,7 @@
           </video>
         </section>
         <section class="bloco" id="bloco-4">
-          <div id="grid-sogou" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px;"></div>
+          <div id="grid-sogou" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;"></div>
         </section>
 
 
@@ -103,51 +103,51 @@
       // ROLAGEM DE IMAGENS
             
         const query = '蝉翼';
-        const mood = 2;  // 2 = fotos, 1 = vetores, 0 = todos
-      
-        // 1. Monta a URL da API da Sogou com os parâmetros corretos
+        const mood = 2;       // conforme seu link
+        // mode=20 é o modo API para imagens (não confundir com mode=1 da URL da página)
         const sogouAPI = `https://pic.sogou.com/napi/pc/searchList?mode=20&start=0&xml_len=48&query=${encodeURIComponent(query)}&mood=${mood}`;
       
-        // 2. Usa o AllOrigins como proxy (não precisa de chave)
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(sogouAPI)}`;
+        const corsProxyKey = 'c23b64bf';  // insira sua key aqui
+        const proxyUrl = `https://corsproxy.io/?key=${corsProxyKey}&url=${encodeURIComponent(sogouAPI)}`;
       
-        fetch(proxyUrl)
+        fetch(proxyUrl, {
+          // Opcional: adicionar headers para simular navegador
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          }
+        })
           .then(response => {
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.json();  // O AllOrigins retorna o JSON diretamente
+            return response.json();
           })
           .then(data => {
-            console.log('Dados recebidos:', data);
+            console.log('Resposta da Sogou:', data);
             const grid = document.getElementById('grid-sogou');
-            grid.innerHTML = ''; // limpa o grid
+            grid.innerHTML = '';
       
-            // A estrutura da resposta da Sogou: data.items é o array de imagens
+            // A estrutura correta: data.items
             const items = data?.items || [];
-      
             if (items.length === 0) {
-              grid.innerHTML = '<p>Nenhuma imagem encontrada para esta busca.</p>';
+              grid.innerHTML = '<p>Nenhuma imagem encontrada.</p>';
               return;
             }
       
             items.forEach(item => {
-              // Campo correto para a URL da imagem: 'picUrl'
-              const imgUrl = item.picUrl;
+              const imgUrl = item.picUrl;   // campo correto
               if (imgUrl && imgUrl.startsWith('http')) {
                 const img = document.createElement('img');
                 img.src = imgUrl;
                 img.alt = item.title || 'Imagem Sogou';
                 img.loading = 'lazy';
-                img.style.cssText = 'width: 100%; height: 200px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+                img.style.cssText = 'width: 100%; height: 200px; object-fit: cover; border-radius: 8px;';
                 grid.appendChild(img);
               }
             });
           })
           .catch(error => {
-            console.error('Erro na requisição:', error);
-            const grid = document.getElementById('grid-sogou');
-            grid.innerHTML = '<p style="color: red; text-align: center;">⚠️ Falha ao carregar as imagens. Tente novamente mais tarde.</p>';
+            console.error('Erro:', error);
+            document.getElementById('grid-sogou').innerHTML = '<p style="color:red;">Falha ao carregar imagens. Verifique a chave do proxy e domínio permitido.</p>';
           });
-
 
         /* const chave = '55284448-c3968ee1416862f04f7195e95';
         const termo = 'cicada';
