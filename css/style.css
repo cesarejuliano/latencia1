@@ -295,6 +295,52 @@ nav.menu + div {
   color: whitesmoke;
 }
 
+/* NINFAS */
+
+/*ninfasB*/
+#scrollLayer {
+  display: none;
+}
+.bloco:first-child {
+  height: 100vh;
+}
+
+.bloco {
+  height: 120vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(80px);
+  transition: opacity 13s ease, transform 3s ease;
+}
+
+.bloco.visivel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bloco video {
+  width: clamp(220px, 40vw, 420px);
+  height: auto;
+  pointer-events: none;
+}
+
+.bloco.delay {
+  transition-delay: 1s;
+}
+
+#scrollLayer {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.5s ease;
+}
+#scrollLayer.ativo {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/*ninfasC*/
 .ninfas-background img {
   position: fixed;
   top: 0;
@@ -305,18 +351,25 @@ nav.menu + div {
   z-index: -2;
 }
 
+.conteudo-ninfas {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+ 
 .audio-container {
-  position: relative;
-  margin-top: 21vh;
+  position: fixed;
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  /*z-index: 10;*/
+  z-index: 50;
+  transition: opacity 1s ease;
 }
-
-/*#audio {
-  display: none;
-}*/
+.audio-container.escondido {
+  opacity: 0;
+  pointer-events: none;
+}
 
 #audio {
   opacity: 0;
@@ -341,44 +394,111 @@ nav.menu + div {
 #playButton:hover {
   color: #BADA54;
 }
-
-#scrollLayer {
-  display: none;
+#galeria {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
 }
-
-.bloco:first-child {
-  height: 100vh;
-}
-
-/* cada bloco ocupa tela inteira */
-.bloco {
-  height: 120vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  opacity: 0;
-  transform: translateY(80px);
-  transition: opacity 13s ease, transform 3s ease;
-}
-
-/* estado visível */
-.bloco.visivel {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* vídeo central */
-.bloco video {
-  width: clamp(220px, 40vw, 420px);
-  height: auto;
+ 
+.slot {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
 }
-
-/* primeiro bloco demora */
-.bloco.delay {
-  transition-delay: 13s; /* controla o “tempo de escavação inicial” */
+ 
+/* elementos genéricos dentro dos slots */
+.slot-el {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  z-index: 10;
+  height: auto;
 }
+ 
+/* asag e viola: sem restrição de largura */
+.sem-limite {
+  max-width: none !important;
+  width: auto !important;
+}
+ 
+/* tarô */
+.carta-taro {
+  position: fixed;
+  height: auto;
+  max-width: 28vw;
+  z-index: 10;
+  border-radius: 30px;
+  box-shadow: -4px 6px 24px rgba(0,0,0,0.8);
+}
+ 
+/* pixabay: 1 coluna */
+#slot-pixabay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow-y: scroll;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+#slot-pixabay::-webkit-scrollbar { display: none; }
+#slot-pixabay.visivel { opacity: 1; }
+ 
+.pixabay-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+}
+.pixabay-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+.pixabay-credit {
+  text-align: center;
+  font-size: 11px;
+  color: #888;
+  padding: 8px;
+  font-family: "Courier New", Courier, monospace;
+}
+ 
+/* scroll hint */
+#scroll-hint {
+  position: fixed;
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 1s ease;
+  z-index: 60;
+  pointer-events: none;
+}
+#scroll-hint span {
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: #e0e0e0;
+  margin: 0 auto;
+  animation: pulso 2s ease-in-out infinite;
+}
+#scroll-hint.visivel { opacity: 1; }
+#scroll-hint.oculto  { opacity: 0; }
+#scroll-hint.final { display: none !important; }
+ 
+@keyframes pulso {
+  0%, 100% { opacity: 0.15; transform: scaleY(0.5); }
+  50%       { opacity: 0.6;  transform: scaleY(1); }
+}
+
+ 
+/*fim de ninfas*/
+
 
 #swapButton {
   position: fixed; /* ou absolute, dependendo da hierarquia */
@@ -394,6 +514,7 @@ nav.menu + div {
   display: none; /* inicialmente oculto */
 }
 
+/*INSUFLARAS*/
 .insuflaras-background {
   position: fixed;
   top: 0; left: 0;
@@ -699,6 +820,7 @@ nav.menu + div {
   #menu-items.active {
     display: flex;
   }
+  .menu { left: auto; transform: none; right: 0; top: 0; } /*ninfas*/
 
   #menu-toggle {
     display: block;
@@ -709,7 +831,6 @@ nav.menu + div {
   .menu {
     position: relative;
   }
-  
   
   .latencia-background video {
     position: absolute;
@@ -722,6 +843,18 @@ nav.menu + div {
     filter: blur(2px);
   }
   
+  /*NINFAS*/
+  .carta-taro { max-width: 70vw; }
+  .pixabay-grid {
+    grid-template-columns: 1fr;
+  }
+  .pixabay-grid img {
+    aspect-ratio: unset;
+    height: auto;
+  }
+
+  
+  /*INSUFLARAS*/
   .insuflaras-imgbackground img {
     position: absolute;
     top: 50%;
