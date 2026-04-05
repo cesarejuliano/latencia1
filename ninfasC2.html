@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latência | Ninfas</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Meta preview -->
+    <meta property="og:title" content="Ninfas — Latência" />
+    <meta property="og:description" content="Episódio da série Latência por César & Juliano." />
+    <meta property="og:image" content="https://cesarejuliano.github.io/latencia1/thumbs/ninfas01.jpg" />
+    <meta property="og:url" content="https://cesarejuliano.github.io/latencia1/ninfas.html" />
+    <meta property="og:type" content="website" />
+    <!-- opcional para Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+  </head>
+  <body class="fade-in">
+    <div class="ninfas-background">
+      <img src="imagens/ninfasfundo.jpg" alt="Fundo Ninfas" />
+    </div>
+    <!--<nav class="menu">
+      <ul>
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>-->
+    <nav class="menu">
+      <button id="menu-toggle">☰</button>
+      <ul id="menu-items">
+        <li><a href="index.html">Episódios</a></li>
+        <li><a href="latencia.html">Latência</a></li>
+        <li><a href="duo.html">César & Juliano</a></li>
+      </ul>
+    </nav>
+
+    <main class="conteudo-ninfas">
+
+      <div class="audio-container" id="audioContainer">
+        <button id="playButton">▶️</button>
+        <audio id="audio" src="audios/ninfas.mp3"></audio>
+      </div>
+
+      <div id="scroll-hint"><span></span></div>
+
+      <div id="galeria">
+        <div class="slot" id="slot-a"></div>
+        <div class="slot" id="slot-b"></div>
+        <div id="slot-pixabay"></div>
+      </div>
+
+    </main>
+
+    <script>
+    /* ── CONFIG ──────────────────────────────────────── */
+    const PIXABAY_KEY        = '55284448-c3968ee1416862f04f7195e95';
+    const SCROLL_SENS        = 0.001;
+    const TARO_SCROLL_TOTAL  = 1000; 
+    const P = 'imagens/ninfas/';
+    const V = 'videos/';
+    const isMobile = () => window.innerWidth <= 768;
+
+    /* ── SEQUÊNCIA ───────────────────────────────────── */
+    const SEQ = [
+      { tipo:'video', src:V+'anneteresa.mp4', largura:'clamp(220px,20vw,320px)' },
+      { tipo:'img',   src:P+'fotoju1.jpg' },
+      { tipo:'img',   src:P+'fotoju2.jpg' },
+      { tipo:'duplo',
+        esq:{ src:V+'cartinha.mp4' },
+        dir:{ src:P+'cartinha.png' } },
+      { tipo:'taro', cartas:[
+        { src:P+'tarodiabo2.jpg', rot:'-2deg'  },
+        { src:P+'tarosol.jpg',    rot:'0.5deg' },
+        { src:P+'tarodiabo1.jpg', rot:'2deg'   },
+      ]},
+      { tipo:'img', src:P+'ninfa_quadro.png',   scrollLivre:true },
+      { tipo:'img', src:P+'asag.png',           scrollLivre:true },
+      { tipo:'img', src:P+'ninfa02.jpg' },
+      { tipo:'img', src:P+'ninfa03.jpg' },
+      { tipo:'img', src:P+'ninfa04.jpeg' },
+      { tipo:'img', src:P+'ninfa05.jpg' },
+      { tipo:'img', src:P+'ninfa06.jpg' },
+      { tipo:'img', src:P+'ninfa07.jpg' },
+      { tipo:'img', src:P+'viola.png',          scrollLivre:true },
+      { tipo:'img', src:P+'ninfa01.jpg' },
+      { tipo:'img', src:P+'ninfas_circulo.png', scrollLivre:true, larguraMobile:'100vw' },
+      { tipo:'img', src:P+'ninfas01.jpg' },
+      { tipo:'img', src:P+'ninfas02.jpg' },
+      { tipo:'img', src:P+'ninfas03.jpg' },
+      { tipo:'img', src:P+'lenine.gif', largura: isMobile() ? '80vw' : 'clamp(80px,10vw,160px)' },
+      { tipo:'img', src:P+'pintura01.jpg' },
+      { tipo:'img', src:P+'pintura02.jpg' },
+      { tipo:'img', src:P+'pintura03.jpg' },
+      { tipo:'img', src:P+'pintura04.jpg' },
+      { tipo:'img', src:P+'ninfa08.jpg' },
+      { tipo:'img', src:P+'cigarrax.jpg' },
+      { tipo:'img', src:P+'pintura05.jpg' },
+      { tipo:'pixabay' },
+    ];
+    const IDX_FIM = SEQ.length - 1;
+
+    let idx          = 0;
+    let iniciado     = false;
+    let pixCarregado = false;
+    let emTransicao  = false;
+    let prog         = 0;
+    let dirAtual     = 0;
+    let ativo        = null;
+    let nextItem     = null;
+
+    const slotA   = document.getElementById('slot-a');
+    const slotB   = document.getElementById('slot-b');
+    const slotPix = document.getElementById('slot-pixabay');
+    const hint    = document.getElementById('scroll-hint');
+    const audioEl = document.getElementById('audio');
+    const audioCt = document.getElementById('audioContainer');
+
+    const VH = () => window.innerHeight;
+    const VW = () => window.innerWidth;
+
+    function mostrarHint()  { hint.classList.add('visivel'); hint.classList.remove('oculto'); }
+    function esconderHint() { hint.classList.remove('visivel'); hint.classList.add('oculto'); }
+
+    function mkEl(info, semLimite) {
+      const ext = info.src.split('.').pop().toLowerCase();
+      let el;
+      if (ext === 'mp4' || ext === 'webm') {
+        el = document.createElement('video');
+        el.autoplay = true; el.muted = true; el.loop = true;
+        el.setAttribute('playsinline','');
+        const s = document.createElement('source');
+        s.src = info.src; s.type = 'video/mp4';
+        el.appendChild(s);
+      } else {
+        el = document.createElement('img');
+        el.src = info.src; el.alt = '';
+        el.addEventListener('error', () => { idx=(idx+1)%SEQ.length; carregarAtivo(); }, { once:true });
+      }
+      el.className      = 'slot-el';
+      el.style.height   = 'auto';
+      el.style.position = 'fixed';
+      el.style.left     = '50%';
+      el.style.transform= 'translateX(-50%)';
+      el.style.top      = (window.innerHeight + 200) + 'px';
+      el.style.opacity  = '0';  
+      el.style.display  = 'block';
+      el.style.zIndex   = '10';
+
+      if (semLimite) {
+        el.style.maxWidth = 'none';
+        el.style.width    = 'auto';
+      } else if (info.largura) {
+        el.style.width    = info.largura;
+        el.style.maxWidth = info.largura;
+      } else {
+        el.style.maxWidth = '90vw';
+      }
+
+      if (isMobile() && info.larguraMobile) {
+        el.style.width    = info.larguraMobile;
+        el.style.maxWidth = '100vw';
+      }
+
+      return el;
+    }
+
+    function aguardarPronto(el, cb) {
+      if (el.tagName === 'VIDEO') {
+        if (el.readyState >= 1) { cb(); return; }
+        el.addEventListener('loadedmetadata', cb, { once:true });
+        setTimeout(cb, 500);
+      } else {
+        if (el.complete && el.naturalHeight) { cb(); return; }
+        el.addEventListener('load', cb, { once:true });
+      }
+    }
+
+    function topoParaCentro(el) {
+      const h = el.offsetHeight || VH();
+      return h <= VH() ? (VH() - h) / 2 : 0;
+    }
+
+    function criarEls(item, slot, cb) {
+      if (item.tipo === 'duplo')  { criarDuplo(item, slot, cb); return; }
+      if (item.tipo === 'taro')   { criarTaroEls(item, slot, cb); return; }
+
+      const el = mkEl({ src: item.src, largura: item.largura }, item.scrollLivre);
+      slot.appendChild(el);
+      aguardarPronto(el, () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          const topo     = topoParaCentro(el);
+          const alturaMax= el.offsetHeight || VH();
+          el.style.top   = (VH() + 200) + 'px';
+          cb([el], topo, alturaMax, false, !!item.scrollLivre);
+        }));
+      });
+    }
+
+    function criarDuplo(item, slot, cb) {
+      const mobile = isMobile();
+      const elE = mkEl(item.esq, false);
+      const elD = mkEl(item.dir, false);
+
+      if (!mobile) {
+        elE.style.height = '640px'; elE.style.width = 'auto'; elE.style.maxWidth = 'none';
+        elD.style.height = '640px'; elD.style.width = 'auto'; elD.style.maxWidth = 'none';
+      }
+      elE.style.top     = (VH() + 200) + 'px'; // ← ADICIONAR
+      elE.style.opacity = '0';                  // ← ADICIONAR
+      elD.style.top     = (VH() + 200) + 'px'; // ← ADICIONAR
+      elD.style.opacity = '0';                  // ← ADICIONAR
+      slot.appendChild(elE);
+      slot.appendChild(elD);
+
+      let prontos = 0;
+      const onP = () => {
+        prontos++;
+        if (prontos < 2) return;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (!mobile) {
+            const wE    = elE.offsetWidth || 300;
+            const wD    = elD.offsetWidth || 300;
+            const startX= (VW() - wE - wD) / 2;
+            elE.style.left = startX + 'px';            elE.style.transform = 'none';
+            elD.style.left = (startX + wE) + 'px';     elD.style.transform = 'none';
+            const topo  = (VH() - 640) / 2;
+            elE.style.top = (VH()+200)+'px';
+            elD.style.top = (VH()+200)+'px';
+            cb([elE, elD], topo, 640, false, false);
+          } else {
+            const hD    = elD.offsetHeight || 300;
+            const hE    = elE.offsetHeight || 300;
+            const totalH= hD + hE + 16;
+            const topoD = (VH() - totalH) / 2;
+            const topoE = topoD + hD + 16;
+            elD.style.left = '50%'; elD.style.transform = 'translateX(-50%)';
+            elE.style.left = '50%'; elE.style.transform = 'translateX(-50%)';
+            elD.style.top  = (VH()+200)+'px';
+            elE.style.top  = (VH()+200)+'px';
+            cb([elD, elE], topoD, totalH, false, false);
+          }
+        }));
+      };
+      aguardarPronto(elE, onP);
+      aguardarPronto(elD, onP);
+    }
+
+    function criarTaroEls(item, slot, cb) {
+      const els = [];
+      let prontos = 0;
+      item.cartas.forEach((c, i) => {
+        const el = document.createElement('img');
+        el.src = c.src; el.alt = '';
+        el.className = 'carta-taro';
+        el.style.position  = 'fixed';
+        el.style.opacity   = '0';
+        el.style.transform = 'none';
+        el.style.zIndex    = '10';
+        el.style.left    = (VW() + 200) + 'px'; // ← ADICIONAR
+        el.style.top     = (VH() + 200) + 'px'; // ← ADICIONAR
+        slot.appendChild(el);
+        els.push({ el, rot: c.rot, idx: i });
+
+        const onLoad = () => {
+          prontos++;
+          if (prontos < item.cartas.length) return;
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            els.forEach(({ el }) => {
+              el.style.top  = (VH()/2 - el.offsetHeight/2) + 'px';
+              el.style.left = (VW()+200) + 'px';
+            });
+            cb(els.map(e => e.el), 0, VH(), true, false);
+          }));
+        };
+        if (el.complete && el.naturalHeight) onLoad();
+        else el.addEventListener('load', onLoad, { once:true });
+        el.addEventListener('error', () => { prontos++; if(prontos>=item.cartas.length) cb([],0,VH(),true,false); }, { once:true });
+      });
+    }
+
+    function taroDestino(i, h) {
+      if (!isMobile()) {
+        const tops  = [ VH()/2-h/2-30, VH()/2-h/2, VH()/2-h/2+30 ];
+        const lefts = [ VW()*0.18, VW()*0.36, VW()*0.54 ];
+        return { left: lefts[i], top: tops[i] };
+      } else {
+        const tops = [ VH()*0.08, VH()/2-h/2, VH()-h-VH()*0.08 ];
+        return { left: VW()/2 - VW()*0.35, top: tops[i] };
+      }
+    }
+
+    function aplicarTaro(taroScroll) {
+      if (!ativo || !ativo.isTaro) return;
+      const els     = ativo.taroEls;
+      const n       = els.length;
+      const slot    = TARO_SCROLL_TOTAL / n;
+      const overlap = slot * 0.5;
+
+      els.forEach(({ el, rot, idx: i }) => {
+        const inicio   = Math.max(0, i*slot - overlap);
+        const fim      = i*slot + slot;
+        const saida    = TARO_SCROLL_TOTAL + i * slot;
+        const saidaFim = saida + slot;
+        const h        = el.offsetHeight || 300;
+        const dest     = taroDestino(i, h);
+        const origemX  = VW() + 200 + i*80;
+        const origemY  = VH() * 0.7;
+        /* destino de saída: espelha a origem mas para a esquerda */
+        const saidaX   = -VW() - 200 - i*80;
+        const saidaY   = VH() * 0.7; /* mesmo arco — sobe até dest.top e volta a descer */
+
+        if (taroScroll < inicio) {
+          el.style.left      = origemX+'px';
+          el.style.top       = origemY+'px';
+          el.style.opacity   = '0';
+          el.style.transform = `rotate(${rot})`;
+        } else if (taroScroll <= fim) {
+          /* entrada em arco da direita */
+          const t    = (taroScroll-inicio)/(fim-inicio);
+          const ease = t*t*(3-2*t);
+          el.style.left      = (origemX+(dest.left-origemX)*ease)+'px';
+          el.style.top       = (origemY+(dest.top-origemY)*ease)+'px';
+          el.style.opacity   = Math.min(1, t*2)+'';
+          el.style.transform = `rotate(${rot})`;
+        } else if (taroScroll <= saida) {
+          /* parada na posição final */
+          el.style.left      = dest.left+'px';
+          el.style.top       = dest.top+'px';
+          el.style.opacity   = '1';
+          el.style.transform = `rotate(${rot})`;
+        } else if (taroScroll <= saidaFim) {
+          /* saída em arco para a esquerda — espelha entrada */
+          const t    = (taroScroll-saida)/(saidaFim-saida);
+          const ease = t*t*(3-2*t);
+          el.style.left      = (dest.left+(saidaX-dest.left)*ease)+'px';
+          el.style.top       = (dest.top+(saidaY-dest.top)*ease)+'px';
+          el.style.opacity   = Math.min(1, (1-t)*2)+'';
+          el.style.transform = `rotate(${rot})`;
+        } else {
+          el.style.opacity = '0';
+          el.style.left    = (-VW()-200)+'px';
+        }
+      });
+
+      ativo.taroScroll   = taroScroll;
+      const ultimaSaida  = TARO_SCROLL_TOTAL + (n-1)*slot + slot;
+      ativo.taroCompleto = taroScroll >= ultimaSaida;
+      ativo.taroInicio   = taroScroll <= 0;
+    }
+
+    function carregarAtivo(onPronto) {
+      slotA.innerHTML = '';
+      slotB.innerHTML = '';
+      slotPix.style.display = 'none';
+      slotPix.classList.remove('visivel');
+      ativo       = null;
+      nextItem    = null;
+      emTransicao = false;
+      prog        = 0;
+
+      const item = SEQ[idx];
+      if (item.tipo === 'pixabay') { carregarPixabay(onPronto); return; }
+
+      criarEls(item, slotA, (els, topo, alturaMax, isTaro, scrollLivre) => {
+        if (isTaro) {
+          ativo = { els, topo, alturaMax, isTaro:true,
+                    taroEls: SEQ[idx].cartas.map((c,i)=>({ el:els[i], rot:c.rot, idx:i })),
+                    taroScroll:0, taroCompleto:false, taroInicio:true };
+          aplicarTaro(0);
+        } else {
+          // Na linha que posiciona no topo
+          els.forEach(el => { 
+            el.style.top     = topo + 'px';
+            el.style.opacity = '1'; // ← garante visibilidade só quando está posicionado
+          });
+          ativo = { els, topo, alturaMax, scrollLivre };
+        }
+        if (onPronto) onPronto();
+      });
+    }
+
+    function carregarPixabay(onPronto) {
+      slotPix.style.display  = 'block';
+      slotPix.style.opacity  = '0';
+      slotPix.classList.remove('visivel');
+      ativo = { els:[slotPix], topo:0, alturaMax:VH()*10, isPix:true };
+
+      const mostrar = () => {
+        slotPix.scrollTop = 0;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          slotPix.classList.add('visivel');
+          if (onPronto) onPronto();
+        }));
+      };
+
+      if (pixCarregado) { mostrar(); return; }
+
+      slotPix.innerHTML = '<p class="pixabay-credit" style="padding:40px">carregando...</p>';
+      fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}&q=cicada&image_type=photo&per_page=30&safesearch=true`)
+        .then(r => r.json())
+        .then(data => {
+          pixCarregado = true;
+          slotPix.innerHTML = '';
+          const grid = document.createElement('div');
+          grid.className = 'pixabay-grid';
+          data.hits.forEach(img => {
+            const el = document.createElement('img');
+            el.src = img.webformatURL; el.alt = img.tags; el.loading = 'lazy';
+            grid.appendChild(el);
+          });
+          slotPix.appendChild(grid);
+          mostrar();
+        })
+        .catch(() => {});
+    }
+
+    function iniciarTransicao(dir) {
+      if (emTransicao) return;
+      const nextIdx = idx + dir;
+      if (nextIdx < 0 || nextIdx > IDX_FIM) return;
+
+      emTransicao = true;
+      dirAtual    = dir;
+      prog        = 0;
+
+      const item = SEQ[nextIdx];
+
+      if (item.tipo === 'pixabay') {
+        snapFade(ativo ? ativo.els : [], 600, () => {
+          idx = nextIdx;
+          carregarAtivo(mostrarHint);
+        });
+        esconderHint();
+        emTransicao = false;
+        return;
+      }
+
+      criarEls(item, slotB, (elsB, topoB, alturaB, isTaro, scrollLivre) => {
+        elsB.forEach(el => { el.style.top = (VH()+200)+'px'; el.style.opacity='1'; });
+        nextItem = { els:elsB, topo:topoB, alturaMax:alturaB, item, isTaro, scrollLivre };
+      });
+    }
+
+    function aplicarProgresso(delta) {
+      if (!emTransicao || !nextItem || !ativo) return;
+      prog = Math.max(0, Math.min(1, prog + delta));
+
+      /* entrante sobe primeiro */
+      const topoInicio = VH() + 200;
+      const topoDest   = nextItem.topo;
+      nextItem.els.forEach(el => {
+        el.style.top = (topoInicio + (topoDest-topoInicio)*prog) + 'px';
+      });
+
+      /* sainte faz fadeout a partir de 30% */
+      const fadeProg = Math.max(0, (prog-0.3)/0.7);
+      ativo.els.forEach(el => { el.style.opacity = (1-fadeProg)+''; });
+
+      if (prog >= 1) confirmarTransicao();
+      if (prog <= 0) cancelarTransicao();
+    }
+
+    function confirmarTransicao() {
+      emTransicao = false;
+      slotA.innerHTML = '';
+      nextItem.els.forEach(el => {
+        slotB.removeChild(el);
+        slotA.appendChild(el);
+        el.style.opacity = '1';
+        el.style.top = nextItem.topo+'px';
+      });
+      idx   = idx + dirAtual;
+      ativo = { els:nextItem.els, topo:nextItem.topo,
+                alturaMax:nextItem.alturaMax, scrollLivre:nextItem.scrollLivre };
+      if (nextItem.isTaro) {
+        ativo.isTaro     = true;
+        ativo.taroEls    = SEQ[idx].cartas.map((c,i)=>({ el:nextItem.els[i], rot:c.rot, idx:i }));
+        ativo.taroScroll = 0;
+        ativo.taroCompleto = false;
+        ativo.taroInicio   = true;
+        aplicarTaro(0);
+      }
+      nextItem = null;
+      slotB.innerHTML = '';
+      mostrarHint();
+    }
+
+    function cancelarTransicao() {
+      emTransicao = false;
+      slotB.innerHTML = '';
+      nextItem = null;
+      ativo.els.forEach(el => { el.style.opacity = '1'; });
+      mostrarHint();
+    }
+
+    function snapFade(els, dur, cb) {
+      const ini = performance.now();
+      function tick(now) {
+        const t = Math.min((now-ini)/dur, 1);
+        els.forEach(el => { el.style.opacity = (1-t)+''; });
+        if (t < 1) requestAnimationFrame(tick);
+        else cb();
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function onInput(dy) {
+      if (!iniciado) return;
+
+      if (ativo && ativo.isPix) {
+        slotPix.scrollTop += dy;
+        if (dy < 0 && slotPix.scrollTop <= 0) {
+          slotPix.style.opacity = '0';
+          slotPix.style.display = 'none';
+          slotPix.classList.remove('visivel');
+          idx = IDX_FIM - 1;
+          carregarAtivo(mostrarHint);
+        }
+        return;
+      }
+
+      if (dy < 0 && idx === 0) return;
+
+      if (ativo && ativo.isTaro) {
+        const novoScroll = Math.max(0, (ativo.taroScroll||0) + dy);
+        aplicarTaro(novoScroll);
+        if (ativo.taroCompleto && dy > 0) {
+          if (!emTransicao) iniciarTransicao(1);
+          if (emTransicao)  aplicarProgresso(Math.abs(dy) * SCROLL_SENS);
+        }
+        if ((ativo.taroScroll||0) <= 0 && dy < 0) {
+          if (!emTransicao) iniciarTransicao(-1);
+          if (emTransicao)  aplicarProgresso(Math.abs(dy) * SCROLL_SENS);
+        }
+        return;
+      }
+
+      if (ativo && ativo.scrollLivre) {
+        const topoAtual  = parseFloat(ativo.els[0].style.top) || ativo.topo;
+        const novoTopo   = topoAtual - dy;
+        ativo.els.forEach(el => { el.style.top = novoTopo+'px'; });
+        ativo.topo = novoTopo;
+        const doisTercos = ativo.alturaMax * (2/3);
+        const jaSaiu     = -novoTopo;
+        if (dy > 0 && jaSaiu >= doisTercos) {
+          if (idx >= IDX_FIM) return;
+          if (!emTransicao) iniciarTransicao(1);
+          if (emTransicao)  aplicarProgresso(Math.abs(dy) * SCROLL_SENS);
+        } else if (dy < 0 && novoTopo >= VH()) {
+          if (!emTransicao) iniciarTransicao(-1);
+          if (emTransicao)  aplicarProgresso(Math.abs(dy) * SCROLL_SENS);
+        }
+        return;
+      }
+
+      if (ativo && !emTransicao && ativo.alturaMax > VH() && dy > 0) {
+        const topoMin   = VH() - ativo.alturaMax;
+        const topoAtual = parseFloat(ativo.els[0].style.top) || ativo.topo;
+        if (topoAtual > topoMin) {
+          const novoTopo = Math.max(topoMin, topoAtual - dy);
+          ativo.els.forEach(el => { el.style.top = novoTopo+'px'; });
+          ativo.topo = novoTopo;
+          return;
+        }
+      }
+
+      if (dy > 0) {
+        if (idx >= IDX_FIM) return;
+        if (!emTransicao) iniciarTransicao(1);
+        if (emTransicao && dirAtual === 1)  aplicarProgresso( Math.abs(dy)*SCROLL_SENS);
+        if (emTransicao && dirAtual === -1) aplicarProgresso(-Math.abs(dy)*SCROLL_SENS);
+      } else {
+        if (!emTransicao) iniciarTransicao(-1);
+        if (emTransicao && dirAtual === -1) aplicarProgresso( Math.abs(dy)*SCROLL_SENS);
+        if (emTransicao && dirAtual === 1)  aplicarProgresso(-Math.abs(dy)*SCROLL_SENS);
+      }
+    }
+
+    window.addEventListener('wheel', e => { e.preventDefault(); onInput(e.deltaY); }, { passive:false });
+    window.addEventListener('keydown', e => {
+      if (e.key==='ArrowDown'||e.key==='ArrowRight') onInput(80);
+      if (e.key==='ArrowUp'  ||e.key==='ArrowLeft')  onInput(-80);
+    });
+
+    let lastTouchY = 0;
+    window.addEventListener('touchstart', e => {
+      lastTouchY = e.touches[0].clientY;
+    }, { passive:true });
+    window.addEventListener('touchmove', e => {
+      const dy = lastTouchY - e.touches[0].clientY;
+      lastTouchY = e.touches[0].clientY;
+      onInput(dy);
+    }, { passive:true });
+
+    function lancarAnnateresa() {
+      carregarAtivo(() => {
+        const els  = ativo.els;
+        const dest = ativo.topo;
+        els.forEach(el => { el.style.top = (VH()+200)+'px'; });
+        const ini = performance.now();
+        const dur = 2400;
+        function tick(now) {
+          const t    = Math.min((now-ini)/dur, 1);
+          const ease = t<0.5 ? 2*t*t : -1+(4-2*t)*t;
+          els.forEach(el => { el.style.top = ((VH()+200)+(dest-(VH()+200))*ease)+'px'; });
+          if (t < 1) requestAnimationFrame(tick);
+          else mostrarHint();
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+
+    document.getElementById('playButton').addEventListener('click', () => {
+      if (iniciado) return;
+      iniciado = true;
+      audioEl.play();
+      audioCt.classList.add('escondido');
+      setTimeout(lancarAnnateresa, 6000);
+    });
+
+    const toggle = document.getElementById('menu-toggle');
+    const items  = document.getElementById('menu-items');
+    if (toggle && items) toggle.addEventListener('click', () => items.classList.toggle('active'));
+
+    window.addEventListener('load', () => { document.body.style.opacity = 1; });
+    </script>
+  </body>
+</html>
