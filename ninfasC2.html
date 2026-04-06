@@ -381,22 +381,30 @@
     }
 
     function carregarPixabay(onPronto) {
+      slotPix.innerHTML = slotPix.innerHTML; /* força repaint */
       slotPix.style.display  = 'block';
       slotPix.style.opacity  = '0';
       slotPix.classList.remove('visivel');
       ativo = { els:[slotPix], topo:0, alturaMax:VH()*10, isPix:true };
-
+    
       const mostrar = () => {
         slotPix.scrollTop = 0;
-        requestAnimationFrame(() => requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          slotPix.style.opacity = '1';
           slotPix.classList.add('visivel');
           if (onPronto) onPronto();
-        }));
+        });
       };
-
+    
       if (pixCarregado) { mostrar(); return; }
-
-      slotPix.innerHTML = '<p class="pixabay-credit" style="padding:40px">carregando...</p>';
+    
+      slotPix.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = 'pixabay-credit';
+      p.style.padding = '40px';
+      p.textContent = 'carregando...';
+      slotPix.appendChild(p);
+    
       fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}&q=cicada&image_type=photo&per_page=30&safesearch=true`)
         .then(r => r.json())
         .then(data => {
@@ -404,15 +412,17 @@
           slotPix.innerHTML = '';
           const grid = document.createElement('div');
           grid.className = 'pixabay-grid';
-          data.hits.forEach(img => {
+          data.hits.forEach(hit => {
             const el = document.createElement('img');
-            el.src = img.webformatURL; el.alt = img.tags; el.loading = 'lazy';
+            el.src = hit.webformatURL;
+            el.alt = hit.tags;
+            el.loading = 'lazy';
             grid.appendChild(el);
           });
           slotPix.appendChild(grid);
           mostrar();
         })
-        .catch(() => {});
+        .catch(err => { console.error('pixabay erro:', err); });
     }
 
     function iniciarTransicao(dir) {
